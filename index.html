@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TracerShow</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flyio@0.6.14/dist/fly.min.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+
+    <script type="text/javascript">
+        const app = Vue.createApp({
+            data() {
+                return {
+                    translates: [],
+                }
+            },
+            methods: {
+                load() {
+                    fly.get('/translates-editor')
+                        .then(function (response) {
+                            console.log(response.data);
+                            app.translates = response.data;
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            alert(error);
+                        });
+                },
+                new_translate() {
+                    let t = {
+                        chinese: '测试',
+                        english: 'Test'
+                    }
+                    fly.post('/new-translate', t)
+                        .then(function (response) {
+                            console.log(response.data);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            alert(error);
+                        });
+                }
+            },
+            created() {
+                // this.load();
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
