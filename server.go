@@ -6,11 +6,49 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"translate/pb"
+
+	"google.golang.org/protobuf/proto"
 )
 
 // 获取用于打包的翻译信息
 func translates(w http.ResponseWriter, r *http.Request) {
+	queryCmd := `
+	SELECT m.key, en.value FROM 
+		(SELECT * FROM main WHERE main.useful = 1) as m 
+		LEFT JOIN en 
+		ON m.keyhash = en.keyHash and m.valueHash = en.valueHash;
+	`
+	// query all useful rows
+	rows, err := DB.Query(queryCmd)
+	if err != nil {
+		fmt.Fprintln(w, "query error", err)
+		w.WriteHeader(500)
+		return
+	}
 
+	// scan to editor info
+	root := pb.Root{
+		Table: make(map[string]*pb.Languages),
+	}
+	var key string
+	var value string
+	for rows.Next() {
+		rows.Scan(&key, &value)
+		root.Table[key] = &pb.Languages{
+			Translate: []string{value},
+		}
+	}
+
+	// convert to pb
+	data, err := proto.Marshal(&root)
+	if err != nil {
+		fmt.Fprintln(w, "marshal error", err)
+		w.WriteHeader(500)
+		return
+	}
+
+	w.Write(data)
 }
 
 type editorInfo struct {
