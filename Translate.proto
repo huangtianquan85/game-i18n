@@ -1,0 +1,11 @@
+syntax = "proto3";
+option go_package = "/pb";
+
+// translate table
+message Languages {
+    repeated string Translate = 1;
+}
+
+message Root {
+  map<string, Languages> Table = 1;
+}
