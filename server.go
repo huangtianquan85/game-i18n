@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"time"
 	"translate/pb"
 
 	"google.golang.org/protobuf/proto"
@@ -113,22 +114,60 @@ func translatesEditor(w http.ResponseWriter, r *http.Request) {
 // 获取一个翻译的所有历史
 // 更新评分，注释（注释属于历史还是属于翻译呢？）
 
-// 一条新的翻译
-func newTranslate(w http.ResponseWriter, r *http.Request) {
+type commitInfo struct {
+	Key   string
+	Value string
+}
+
+func commit(r *http.Request) error {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		fmt.Printf("new-translate read body error: %v\n", err)
-		return
+		return fmt.Errorf("commit-translate read body error: %v", err)
 	}
 
-	var t Info
+	// unmarshal
+	var t commitInfo
 	err = json.Unmarshal(body, &t)
 	if err != nil {
-		fmt.Printf("new-translate unmarshal error: %v\n", err)
-		return
+		return fmt.Errorf("commit-translate unmarshal error: %v", err)
 	}
 
-	// fmt.Fprintf(w, "%s, %s, %d", t.Chinese, t.English, time.Now().UnixNano())
+	// begin context
+	tx, err := DB.Begin()
+	if err != nil {
+		return fmt.Errorf("context begin error: %v", err)
+	}
+
+	// insert to en
+	cmd := "insert ignore into `en` (`keyHash`, `valueHash`, `value`, timestamp, userId) values (?,?,?,?,?);"
+	_, err = tx.Exec(cmd, StringMd5(t.Key), StringMd5(t.Value), t.Value, time.Now().UnixNano(), 0)
+	if err != nil {
+		return fmt.Errorf("insert error: %v", err)
+	}
+
+	// update main
+	cmd = "UPDATE main SET main.valueHash=? WHERE main.keyHash=?"
+	_, err = tx.Exec(cmd, StringMd5(t.Value), StringMd5(t.Key))
+	if err != nil {
+		return fmt.Errorf("update error: %v", err)
+	}
+
+	// commit
+	err = tx.Commit()
+	if err != nil {
+		return fmt.Errorf("commit error: %v", err)
+	}
+
+	return nil
+}
+
+// 提交翻译
+func commitTranslate(w http.ResponseWriter, r *http.Request) {
+	if err := commit(r); err != nil {
+		fmt.Println(err)
+		w.WriteHeader(500)
+		w.Write([]byte(err.Error()))
+	}
 }
 
 // 更新翻译需求
@@ -163,7 +202,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func StartServer() {
-	http.HandleFunc("/new-translate", newTranslate)
+	http.HandleFunc("/commit-translate", commitTranslate)
 	http.HandleFunc("/translates", translates)
 	http.HandleFunc("/translates-editor", translatesEditor)
 	http.HandleFunc("/new-sources", newSources)

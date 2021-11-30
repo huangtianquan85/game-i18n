@@ -7,14 +7,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TracerShow</title>
     <script src="https://unpkg.com/vue@3.2.23/dist/vue.global.prod.js"></script>
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <script src="//unpkg.com/element-plus"></script>
     <script src="https://cdn.jsdelivr.net/npm/flyio@0.6.14/dist/fly.min.js"></script>
     <style>
+        .editor table {
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
 
+        .key .value {
+            word-wrap: break-word;
+            width: 300px;
+        }
+
+        .value textarea {
+            width: 300px;
+        }
+
+        .commit {
+            width: 100px;
+        }
+
+        .star {
+            width: 50px;
+        }
+
+        .comment {
+            width: calc(30% - 50px);
+        }
     </style>
 </head>
 
 <body>
     <div id="app">
+        <div class="editor">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="key"> 中文 </th>
+                        <th class="value"> 英文 </th>
+                        <th class="value"> 提交 </th>
+                        <th class="star"> 评分 </th>
+                        <th class="comment"> 备注 </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="i in translates">
+                        <td class="key"> {{ i.Key }} </td>
+                        <td class="value">
+                            <textarea v-model="i.Value"></textarea>
+                        </td>
+                        <td class="commit">
+                            <button v-if="i.origin !== i.Value" @click="commit(i)">Commit</button>
+                        </td>
+                        <td class="star"> Star </td>
+                        <td class="comment"> Comment </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script type="text/javascript">
@@ -30,20 +82,26 @@
                         .then(function (response) {
                             console.log(response.data);
                             app.translates = response.data;
+                            app.init();
                         })
                         .catch(function (error) {
                             console.log(error);
                             alert(error);
                         });
                 },
-                new_translate() {
-                    let t = {
-                        chinese: '测试',
-                        english: 'Test'
+                init() {
+                    for (const i of this.translates) {
+                        i.origin = i.Value;
                     }
-                    fly.post('/new-translate', t)
+                },
+                commit(i) {
+                    let commit = {
+                        Key: i.Key,
+                        Value: i.Value,
+                    }
+                    fly.post('/commit-translate', commit)
                         .then(function (response) {
-                            console.log(response.data);
+                            i.origin = i.Value;
                         })
                         .catch(function (error) {
                             console.log(error);
@@ -52,7 +110,7 @@
                 }
             },
             created() {
-                // this.load();
+                this.load();
             }
         }).mount('#app');
     </script>
