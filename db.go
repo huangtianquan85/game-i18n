@@ -3,6 +3,8 @@ package main
 import (
 	"database/sql"
 	"fmt"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const (
@@ -16,30 +18,25 @@ const (
 var DB *sql.DB
 
 /*
-create table history (
-	`id` bigint not null auto_increment primary key,
-    `chinese` varchar(1024) not null,
-    `english` varchar(1024) not null,
-	`timestamp` bigint not null
-) engine=innodb default charset=utf8;
-
-create table translate (
-    `chinese` varchar(1024) not null primary key,
+create table en (
+    `keyHash` char(32) not null,
+	`valueHash` char(32) not null,
+    `value` varchar(4096) not null,
 	`timestamp` bigint not null,
+	`userId` int not null,
+	primary key (`keyHash`, `valueHash`)
+) engine=innodb default charset=utf8mb4;
+
+create table main (
+    `keyhash` char(32) not null primary key,
+	`key` varchar(4096) not null,
+	`valueHash` char(32) not null,
     `source` varchar(512) not null,
     `useful` tinyint not null,
-	`star` tinyint not null,
-	`comment` varchar(1024) not null
-) engine=innodb default charset=utf8;
+	`star` tinyint not null default 0,
+	`comment` varchar(1024) not null default ''
+) engine=innodb default charset=utf8mb4;
 */
-
-type Info struct {
-	Chinese   string
-	English   string
-	Comment   string
-	Star      int
-	Timestamp string
-}
 
 func InitDB() error {
 	path := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, password, host, port, dbName)
