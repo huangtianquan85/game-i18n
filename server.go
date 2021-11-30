@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 // 获取用于打包的翻译信息
@@ -14,17 +13,54 @@ func translates(w http.ResponseWriter, r *http.Request) {
 
 }
 
+type editorInfo struct {
+	KeyHash   string
+	Key       string
+	ValueHash string
+	Value     string
+	Timestamp string
+	UserId    int
+	Source    string
+	Star      int
+	Comment   string
+}
+
 // 获取用于编辑器的翻译信息
 func translatesEditor(w http.ResponseWriter, r *http.Request) {
-	infos := make([]Info, 0)
-	infos = append(infos, Info{
-		Chinese:   "测试",
-		English:   "Test",
-		Comment:   "注释",
-		Star:      5,
-		Timestamp: strconv.FormatInt(time.Now().UnixNano(), 10),
-	})
+	queryCmd := `
+	SELECT m.keyHash, m.key, m.valuehash, m.source, m.star, m.comment, en.value, en.timestamp, en.userId FROM 
+		(SELECT * FROM main WHERE main.useful = 1) as m 
+		LEFT JOIN en 
+		ON m.keyhash = en.keyHash and m.valueHash = en.valueHash;
+	`
 
+	// query all useful rows
+	rows, err := DB.Query(queryCmd)
+	if err != nil {
+		fmt.Fprintln(w, "query error", err)
+		w.WriteHeader(500)
+		return
+	}
+
+	// scan to editor info
+	infos := make([]editorInfo, 0)
+	for rows.Next() {
+		i := new(editorInfo)
+		var t int64
+		rows.Scan(&i.KeyHash,
+			&i.Key,
+			&i.ValueHash,
+			&i.Source,
+			&i.Star,
+			&i.Comment,
+			&i.Value,
+			&t,
+			&i.UserId)
+		i.Timestamp = strconv.FormatInt(t, 10)
+		infos = append(infos, *i)
+	}
+
+	// convert to json
 	data, err := json.Marshal(infos)
 	if err != nil {
 		fmt.Fprintln(w, "marshal error", err)
@@ -54,7 +90,7 @@ func newTranslate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "%s, %s, %d", t.Chinese, t.English, time.Now().UnixNano())
+	// fmt.Fprintf(w, "%s, %s, %d", t.Chinese, t.English, time.Now().UnixNano())
 }
 
 // 更新翻译需求
