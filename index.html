@@ -22,7 +22,7 @@
 
 <body>
     <div id="app">
-        <div class="editor columns box" v-if="editor.item !== null">
+        <div class="editor columns box" v-if="editor.item !== null" style="z-index: 1;">
             <div class="column">
                 <div>
                     <div class="field">
@@ -104,9 +104,16 @@
                     <th> 评分 </th>
                     <th> 备注 </th>
                 </tr>
+                <tr>
+                    <th> <input class="input" type="text" placeholder="筛选中文" v-model="filter.key"> </th>
+                    <th> <input class="input" type="text" placeholder="筛选英文" v-model="filter.value"> </th>
+                    <th> </th>
+                    <th> <input class="input" type="text" style="width: 50px;" v-model="filter.star"> </th>
+                    <th> <input class="input" type="text" placeholder="筛选备注" v-model="filter.comment"> </th>
+                </tr>
             </thead>
             <tbody>
-                <tr v-for="i in translates">
+                <tr v-for="i in filtered">
                     <td style="width: 400px;">
                         <div class="block">{{ i.Key }}</div>
                     </td>
@@ -139,7 +146,25 @@
                         baidu: '',
                         google: '',
                         item: null
+                    },
+                    filter: {
+                        key: '',
+                        value: '',
+                        star: 0,
+                        comment: '',
                     }
+                }
+            },
+            computed: {
+                filtered() {
+                    return this.translates.filter(function (t) {
+                        let ft = app.filter;
+                        return ((ft.key.length === 0 || t.Key.indexOf(ft.key) !== -1)
+                            && (ft.value.length === 0 || ((ft.value === '@' && t.Value.length === 0) || t.Value.indexOf(ft.value) !== -1))
+                            && t.Star >= ft.star
+                            && (ft.comment.length === 0 || t.Comment.indexOf(ft.comment) !== -1)
+                        );
+                    })
                 }
             },
             methods: {
