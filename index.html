@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TracerShow</title>
+    <title>FVBI Translate</title>
     <script src="https://unpkg.com/vue@3.2.23/dist/vue.global.prod.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flyio@0.6.14/dist/fly.min.js"></script>
     <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
@@ -119,12 +119,12 @@
                     <td style="width: 400px;">
                         <div class="block">{{ i.Key }}</div>
                     </td>
-                    <td style="width: 400px;">
-                        <div class="block" @click="edit(i)">{{ i.Value }}</div>
+                    <td style="width: 400px;" @click="edit(i)">
+                        <div class="block">{{ i.Value }}</div>
                     </td>
                     <td style="text-align: center; vertical-align: middle;"> {{ i.Star }}</td>
-                    <td style="width: 200px;">
-                        <div class="block" @click="edit(i)">{{ i.Comment }}</div>
+                    <td style="width: 300px;" @click="edit(i)">
+                        <div class="block">{{ i.Comment }}</div>
                     </td>
                 </tr>
             </tbody>
