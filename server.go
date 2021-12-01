@@ -114,8 +114,10 @@ func translatesEditor(w http.ResponseWriter, r *http.Request) {
 // 更新评分，注释（注释属于历史还是属于翻译呢？）
 
 type commitInfo struct {
-	Key   string
-	Value string
+	Key     string
+	Value   string
+	Star    int
+	Comment string
 }
 
 func commit(r *http.Request) error {
@@ -145,8 +147,8 @@ func commit(r *http.Request) error {
 	}
 
 	// update main
-	cmd = "UPDATE main SET main.valueHash=? WHERE main.keyHash=?"
-	_, err = tx.Exec(cmd, StringMd5(t.Value), StringMd5(t.Key))
+	cmd = "UPDATE main SET main.valueHash=?, main.star=?, main.comment=? WHERE main.keyHash=?"
+	_, err = tx.Exec(cmd, StringMd5(t.Value), t.Star, t.Comment, StringMd5(t.Key))
 	if err != nil {
 		return fmt.Errorf("update error: %v", err)
 	}

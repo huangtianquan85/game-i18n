@@ -43,9 +43,13 @@
                         <label class="label">评分</label>
                         <div class="control">
                             <div class="select">
-                                <select>
-                                    <option>1</option>
-                                    <option>2</option>
+                                <select v-model.number="editor.copy.star">
+                                    <option disabled value=0>未评</option>
+                                    <option value=1>1 必改</option>
+                                    <option value=2>2 得改</option>
+                                    <option value=3>3 凑合</option>
+                                    <option value=4>4 不错</option>
+                                    <option value=5>5 完美</option>
                                 </select>
                             </div>
                         </div>
