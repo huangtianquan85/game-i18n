@@ -217,7 +217,7 @@ func update(r *http.Request) error {
 
 	// insert to main
 	cmd := "INSERT ignore INTO main (`keyHash`, `key`, `valueHash`, `source`, useful) VALUES (?,?,?,?,?);"
-	for k, _ := range m {
+	for k := range m {
 		if _, ok := dbItems[k]; !ok {
 			_, err = tx.Exec(cmd, StringMd5(k), k, StringMd5(""), "", 1)
 			if err != nil {
