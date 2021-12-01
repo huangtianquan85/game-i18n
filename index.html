@@ -7,66 +7,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TracerShow</title>
     <script src="https://unpkg.com/vue@3.2.23/dist/vue.global.prod.js"></script>
-    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
-    <script src="//unpkg.com/element-plus"></script>
     <script src="https://cdn.jsdelivr.net/npm/flyio@0.6.14/dist/fly.min.js"></script>
+    <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <style>
-        .editor table {
-            table-layout: fixed;
-            word-wrap: break-word;
-        }
-
-        .key .value {
-            word-wrap: break-word;
-            width: 300px;
-        }
-
-        .value textarea {
-            width: 300px;
-        }
-
-        .commit {
-            width: 100px;
-        }
-
-        .star {
-            width: 50px;
-        }
-
-        .comment {
-            width: calc(30% - 50px);
+        .editor {
+            position: fixed;
+            width: 90%;
+            top: 10%;
+            left: 5%;
         }
     </style>
 </head>
 
 <body>
     <div id="app">
-        <div class="editor">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="key"> 中文 </th>
-                        <th class="value"> 英文 </th>
-                        <th class="value"> 提交 </th>
-                        <th class="star"> 评分 </th>
-                        <th class="comment"> 备注 </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="i in translates">
-                        <td class="key"> {{ i.Key }} </td>
-                        <td class="value">
-                            <textarea v-model="i.Value"></textarea>
-                        </td>
-                        <td class="commit">
-                            <button v-if="i.origin !== i.Value" @click="commit(i)">Commit</button>
-                        </td>
-                        <td class="star"> Star </td>
-                        <td class="comment"> Comment </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="editor columns box" v-if="editor.item !== null">
+            <div class="column">
+                <div>
+                    <div class="field">
+                        <label class="label">中文</label>
+                        <div class="control">
+                            <textarea class="textarea" readonly v-model="editor.item.Key"></textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="field">
+                        <label class="label">翻译</label>
+                        <div class="control">
+                            <textarea class="textarea" v-model="editor.item.Value"></textarea>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">评分</label>
+                        <div class="control">
+                            <div class="select">
+                                <select>
+                                    <option>1</option>
+                                    <option>2</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">备注</label>
+                        <div class="control">
+                            <textarea class="textarea" v-model="editor.item.Comment"></textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-link">Submit</button>
+                        </div>
+                        <div class="control">
+                            <button class="button is-link is-light" @click="close_editor()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div>
+                    <div class="field">
+                        <label class="label">有道</label>
+                        <div class="control">
+                            <textarea class="textarea" readonly v-model="editor.youdao"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Google</label>
+                        <div class="control">
+                            <textarea class="textarea" readonly v-model="editor.google"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">百度</label>
+                        <div class="control">
+                            <textarea class="textarea" readonly v-model="editor.baidu"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <table class="table is-striped">
+            <thead>
+                <tr>
+                    <th> 中文 </th>
+                    <th> 英文 </th>
+                    <th> 提交 </th>
+                    <th> 评分 </th>
+                    <th> 备注 </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="i in translates">
+                    <td style="width: 400px;">
+                        <div class="block">{{ i.Key }}</div>
+                    </td>
+                    <td style="width: 400px;">
+                        <div class="block" @click="edit(i)">{{ i.Value }}</div>
+                    </td>
+                    <td>
+                        <button class="button is-success" v-if="i.origin !== i.Value" @click="commit(i)">
+                            <span class="icon is-small">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </button>
+                    </td>
+                    <td style="text-align: center; vertical-align: middle;"> {{ i.Star }}</td>
+                    <td style="width: 200px;">
+                        <div class="block" @click="edit(i)">{{ i.Comment }}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <script type="text/javascript">
@@ -74,6 +134,12 @@
             data() {
                 return {
                     translates: [],
+                    editor: {
+                        youdao: '',
+                        baidu: '',
+                        google: '',
+                        item: null
+                    }
                 }
             },
             methods: {
@@ -93,6 +159,13 @@
                     for (const i of this.translates) {
                         i.origin = i.Value;
                     }
+                },
+                edit(i) {
+                    this.editor.item = i;
+                    // auto translate
+                },
+                close_editor() {
+                    this.editor.item = null;
                 },
                 commit(i) {
                     let commit = {
