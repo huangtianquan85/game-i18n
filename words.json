@@ -114,12 +114,14 @@
     "translate": "<color=#225900>Upgrade</color>"
   },
   "<color=#2561EF>势均力敌</color>": {
+    "comment": "赖：改为普通",
     "translate": "<color=#2561EF>Normal</color>"
   },
   "<color=#35b7ff>精良：①.②</color>": {
     "translate": "<color=#35b7ff>Sophisticated:①.②</color>"
   },
   "<color=#438c0d>不值一提</color>": {
+    "comment": "赖：改为容易",
     "translate": "<color=#438c0d>Easy</color>"
   },
   "<color=#5D331B>升 级</color>": {
@@ -144,12 +146,14 @@
     "translate": "<color=#ABC8FF>Leave a seat for a capable person</color>"
   },
   "<color=#EC2237>绝望地狱</color>": {
+    "comment": "赖：改为地狱",
     "translate": "<color=#EC2237>Hell</color>"
   },
   "<color=#b1e0f6>无加成</color>": {
     "translate": "<color=#b1e0f6>No bonus</color>"
   },
   "<color=#c07615>困难重重</color>": {
+    "comment": "赖：改为困难",
     "translate": "<color=#c07615>Hard</color>"
   },
   "<color=#d07dff>史诗：①.②</color>": {
@@ -162,9 +166,11 @@
     "translate": "<color=#f99800>Legend:①.②</color>"
   },
   "<color=#f99800>传说：①</color>": {
+    "comment": "赖：补充",
     "translate": "<color=#f99800>Legendary：①</color>"
   },
   "<color=#f99800>暗夜王子</color>": {
+    "comment": "赖：补充",
     "translate": "<color=#f99800>Night Prince</color>"
   },
   "<color=#ff0000>装备巅峰等级达到{0}级可继续突破</color>": {
@@ -447,6 +453,7 @@
     "translate": "{0} <color=#ffffff>seconds left to enter the battle</color>"
   },
   "{0} 级解锁": {
+    "comment": "赖：简化",
     "translate": "LV. {0}"
   },
   "{0}.{1}日解锁": {
@@ -474,6 +481,7 @@
     "translate": "Insufficient {0}!"
   },
   "{0}世界排行{1}": {
+    "comment": "赖：简化",
     "translate": "{0}World{1}"
   },
   "{0}件": {
@@ -534,6 +542,7 @@
     "translate": "{0} days ago"
   },
   "{0}好友排行{1}": {
+    "comment": "赖：简化",
     "translate": "{0}Friend{1}"
   },
   "{0}小时": {
@@ -549,6 +558,7 @@
     "translate": "Insufficient inventory of {0}!"
   },
   "{0}成就奖励{1}": {
+    "comment": "赖：简化",
     "translate": "{0}Achievement{1}"
   },
   "{0}折": {
@@ -558,6 +568,7 @@
     "translate": "{0}Ranking rewards{1}"
   },
   "{0}星激活": {
+    "comment": "赖：简化",
     "translate": "{0} Star"
   },
   "{0}月{1}日{2}点刷新": {
@@ -570,6 +581,7 @@
     "translate": "{0} times"
   },
   "{0}每周奖励{1}": {
+    "comment": "赖：简化",
     "translate": "{0}Periodic{1}"
   },
   "{0}激活月卡": {
@@ -705,6 +717,7 @@
     "translate": "① Players who have coupons can check the redemption code on the My Youpin interface and go to \"Xiaomi Youpin\" to redeem it. \n②. The official staff will not ask you for a password in any name. Please pay attention to protect the security of your account. \nTips: Exchange tokens will disappear when the event ends. Remember to exchange rewards in time!"
   },
   "①、根据房间层数获得奖励\n②、玩家进度层数低于房间层数时，核芯按照<color=#039c6b>房间层数</color>获得奖励\n③、玩家进度层数低于房间层数时，异能石按照<color=#039c6b>房间层数</color>获得奖励\n④、玩家进度与房间层数相差较大时，套装异能石掉落几率将会降低": {
+    "comment": "赖：简化",
     "translate": "①. According to the number of room floors to get rewards\n②. When the player’s progress is lower than the room, the core rewards will be according to <color=#039c6b>room</color>\n③. When the player’s progress is lower than the room, the power stone rewards will be according to the <color=#039c6b>room</color>\n④. When the player’s progress differs greatly from the room floor, the rate of the power stone rewards will be reduced."
   },
   "①、每日可无限次挑战。\n②、挑战模式更为考验飞行员操作，每个关卡都存在对应的战力区间，超过区间上限的部分战力将不会生效。\n③、完成相应关卡挑战可以获得④-⑤枚星星。\n⑥、星星可以用于升级称号。\n⑦、从第⑧层开始可以穿戴指定阵营装备获得额外属性加成。": {
@@ -813,6 +826,7 @@
     "translate": "① day"
   },
   "①天②小时": {
+    "comment": "赖：补充",
     "translate": "① days ② hours"
   },
   "①天②小时后结束": {
@@ -822,6 +836,7 @@
     "translate": "End in ① Days ② Hours ③ Minutes"
   },
   "①天每日再送": {
+    "comment": "赖：补充",
     "translate": "①d Daily Handsel"
   },
   "①小时": {
@@ -855,6 +870,7 @@
     "translate": "① draw can't get the orange outfit"
   },
   "①星激活": {
+    "comment": "赖：简化",
     "translate": "① Star"
   },
   "①月②日-③月④日": {
@@ -933,6 +949,7 @@
     "translate": "Level ① gift bag"
   },
   "①级等级礼包": {
+    "comment": "赖：补充",
     "translate": "Lv① Offer"
   },
   "①级自选宝箱": {
@@ -957,6 +974,7 @@
     "translate": "①) This game is a flying game, suitable for users who are ② years old and above. It is recommended that minors use the game products under parental supervision. \n\n③) This game has no background, no world view, and no plot. The main gameplay is to doge and fly, and the gameplay is simple and friendly. The game is in cartoon pixel style, the character design is cute, the scene is bright, and the music is relaxing and lively. There are competitive content in the game, and the competitive method is to doge and fly, and the final score decides the victory or failure. There is a text-based social system for strangers in the game, and the management of the social system follows relevant laws and regulations. \n\n④) There is a real-name authentication system for users in the game, and users who are authenticated as minors will be subject to the following management:\nAccording to relevant national requirements, there is a real-name authentication system for users in the game, and users who have not passed the real-name authentication are not allowed to enter the game; Users who are authenticated as minors are not allowed to enter the game at any time except Friday, Saturday, Sunday and statutory holidays from 5:00 to ⑥. \nSome of the gameplay and items in the game require payment. According to the management regulations of Tencent Health System, users who are authenticated as minors will be subject to the following management: \nUsers under the age of ⑦ cannot pay; for above ⑧ but under ⑨ minor users, the single top-up amount shall not exceed ⑩ and the cumulative monthly top-up amount shall not exceed ⑪ RMB; for above ⑫ minor users, the single top-up amount shall not exceed ⑬ RMB, and the cumulative monthly top-up amount shall not exceed ⑭ RMB. \n\n⑮) In the game, the player needs to slide on screen to move the controlled aircraft left and right, doge the target and complete the shooting of the target, which helps to exercise the player's hand-eye coordination ability. During the game, the player needs to respond quickly to the sudden appearance of the target, which helps to train the player's brain response speed."
   },
   "①：东方魅影②": {
+    "comment": "赖：简化",
     "translate": "①：Phantom East②"
   },
   "①：古堡惊魂②": {
@@ -1173,33 +1191,43 @@
     "translate": "【Power Tower】Unlock after ② people pass Floor ①"
   },
   "【挑战模式】第①关 东方异梦": {
+    "comment": "赖：“挑战模式第X关”简化成“X”",
     "translate": "①: Eastern Dream"
   },
   "【挑战模式】第①关 东方魅影": {
+    "comment": "赖：“挑战模式第X关”简化成“X”",
     "translate": "①: phantom east"
   },
   "【挑战模式】第①关 古堡惊魂": {
+    "comment": "赖：“挑战模式第X关”简化成“X”",
     "translate": "①: Castle Nightmare"
   },
   "【挑战模式】第①关 星河历险": {
+    "comment": "赖：“挑战模式第X关”简化成“X”",
     "translate": "①: Galaxy Adventure"
   },
   "【挑战模式】第①关 星际冒险": {
+    "comment": "赖：“挑战模式第X关”简化成“X”",
     "translate": "①: Interstellar Adventure"
   },
   "【挑战模式】第①关 暴躁电玩": {
+    "comment": "赖：“挑战模式第X关”简化成“挑战X”",
     "translate": "Challenge ①: Fiery Video Game"
   },
   "【挑战模式】第①关 欢乐鬼屋": {
+    "comment": "赖：“挑战模式第X关”简化成“X”",
     "translate": "①: Happy Haunted House"
   },
   "【挑战模式】第①关 狂暴电玩": {
+    "comment": "赖：“挑战模式第X关”简化成“X”",
     "translate": "①: Rage Video Game"
   },
   "【挑战模式】第①关 疯狂美食": {
+    "comment": "赖：“挑战模式第X关”简化成“挑战X”",
     "translate": "Challenge ①: Crazy Food"
   },
   "【挑战模式】第①关 美食天堂": {
+    "comment": "赖：“挑战模式第X关”简化成“X”",
     "translate": "①: Food Paradise"
   },
   "【武】冻结": {
@@ -1287,6 +1315,7 @@
     "translate": "Like old friends when first meet: Accumulatively add ① friends in total"
   },
   "一键删除": {
+    "comment": "赖：简化",
     "translate": "Remove All"
   },
   "一键选择": {
@@ -1296,9 +1325,11 @@
     "translate": "One-click\n"
   },
   "一键领取": {
+    "comment": "赖：简化",
     "translate": "Claim All"
   },
   "一键领取并回赠": {
+    "comment": "赖：简化",
     "translate": "Send & Receive"
   },
   "一阶神秘礼盒": {
@@ -1326,9 +1357,11 @@
     "translate": "3-Star rewards"
   },
   "三星强化": {
+    "comment": "赖：补充",
     "translate": "3-Star"
   },
   "三星技能": {
+    "comment": "赖：补充",
     "translate": "3-Star"
   },
   "三段": {
@@ -1560,6 +1593,7 @@
     "translate": "Eastern Strange Tales Level ①"
   },
   "东方魅影": {
+    "comment": "赖：简化",
     "translate": "phantom east"
   },
   "两件八折，五件包邮。": {
@@ -1575,6 +1609,7 @@
     "translate": "Personal information management"
   },
   "个人设置": {
+    "comment": "赖：简化",
     "translate": "settings"
   },
   "中士": {
@@ -1731,6 +1766,7 @@
     "translate": "Above the clouds"
   },
   "五星强化": {
+    "comment": "赖：补充",
     "translate": "5-Star"
   },
   "亡灵-X": {
@@ -1824,9 +1860,11 @@
     "translate": "People always mistake about its surname and first name, and then it doesn't care anymore."
   },
   "人生轨迹，暂无交集": {
+    "comment": "赖：简化",
     "translate": "has no intersection at the moment"
   },
   "仇礼包": {
+    "comment": "赖：补充",
     "translate": "revanche Offer"
   },
   "今天已经充能": {
@@ -2007,6 +2045,7 @@
     "translate": "Penguin Pilot"
   },
   "优秀": {
+    "comment": "赖：简化",
     "translate": "Good"
   },
   "优秀攻击核芯": {
@@ -2055,18 +2094,22 @@
     "translate": "Legendary pilot"
   },
   "传奇飞行员Ⅰ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "LegendaryⅠ"
   },
   "传奇飞行员Ⅱ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Legendary II"
   },
   "传奇飞行员Ⅲ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Legendary Ⅲ"
   },
   "传说": {
     "translate": "Legend"
   },
   "传说Up装备": {
+    "comment": "赖：补充",
     "translate": "Legendary UP"
   },
   "传说中冰河世纪时代的动物，尖利的长牙，击败了大量敌人。": {
@@ -2082,6 +2125,7 @@
     "translate": "Legendary light wing breakthrough stone fragment"
   },
   "传说光翼突破礼包": {
+    "comment": "赖：补充",
     "translate": "Legendary Light Wing Breakthrough Offer"
   },
   "传说品质": {
@@ -2100,6 +2144,7 @@
     "translate": "Legendary pet breakthrough stone fragment"
   },
   "传说宠物突破礼包": {
+    "comment": "赖：补充",
     "translate": "Legendary Pet Breakthrough Offer"
   },
   "传说宠物阿冥": {
@@ -2121,6 +2166,7 @@
     "translate": "Legendary fighter breakthrough stone fragment"
   },
   "传说战机突破礼包": {
+    "comment": "赖：补充",
     "translate": "Legendary Fighter Breakthrough Offer"
   },
   "传说战机阿胜": {
@@ -2145,6 +2191,7 @@
     "translate": "Legendary weapon breakthrough stone fragment"
   },
   "传说武器突破礼包": {
+    "comment": "赖：补充",
     "translate": "Legendary Weapon Breakthrough Offer"
   },
   "传说武器红樱飞弹": {
@@ -2244,9 +2291,11 @@
     "translate": "Maximum AP that can be given away"
   },
   "体力领取次数(①/②)": {
+    "comment": "赖：简化",
     "translate": "Receive AP (①/②)"
   },
   "体力领取次数{0}": {
+    "comment": "赖：简化",
     "translate": "Receive AP {0}"
   },
   "体验关尚未开启": {
@@ -2754,6 +2803,7 @@
     "translate": "Pass the Level with HP not lower than  ①"
   },
   "全程血量不低于①通关": {
+    "comment": "赖：简化",
     "translate": "Pass and keep Hp more than ①"
   },
   "全部": {
@@ -2877,6 +2927,7 @@
     "translate": "Open<color=#ffd71f>①</color>more times for a guaranteed <color=#d07dff>Epic</color>or<color=#f99800>Legendary</color>"
   },
   "再扫荡①次": {
+    "comment": "赖：简化",
     "translate": "Quick Raid"
   },
   "再抽<color=#ffd71f>①</color>次必得": {
@@ -3162,9 +3213,11 @@
     "translate": "Reduce difficulty"
   },
   "凑齐①件以上套装时可获得“无尽冲击”属性": {
+    "comment": "赖：可能不太靠谱的简化",
     "translate": "Equip the suit to activate \"Endless Impulse\" skill "
   },
   "凑齐①件以上套装时可获得“破冰”属性": {
+    "comment": "赖：可能不太靠谱的简化",
     "translate": "GeEquip the suit to activate \"Icebreaker\" skill "
   },
   "凑齐①件以上套装时可获得破冰攻击": {
@@ -3276,6 +3329,7 @@
     "translate": "Split enhancement"
   },
   "分解": {
+    "comment": "赖：简化",
     "translate": "Breakdown"
   },
   "分解传说装备获得": {
@@ -3345,6 +3399,7 @@
     "translate": "The honor avatar frame of the first-generation pilots, the inferior pilots will bow to say hello when they see it"
   },
   "初始技能": {
+    "comment": "赖：补充",
     "translate": "0-Star"
   },
   "初始自带①级冰冻": {
@@ -3462,6 +3517,7 @@
     "translate": "Insufficient draws remaining"
   },
   "剩余挑战次数：{0}": {
+    "comment": "赖：简化",
     "translate": "remaining: {0}"
   },
   "剩余方块：①": {
@@ -3630,6 +3686,7 @@
     "translate": "The steamed bun walked on the road, feeling a little hungry, so he ate himself."
   },
   "匹配中...": {
+    "comment": "赖：感觉已经很短了，不知道怎么简了",
     "translate": "Matching..."
   },
   "匹配取消": {
@@ -3813,6 +3870,7 @@
     "translate": "Two-player mode rule description"
   },
   "双倍领取": {
+    "comment": "赖：补充",
     "translate": "Gain doubled"
   },
   "双打模式马上开车，就差你了！": {
@@ -3912,6 +3970,7 @@
     "translate": "Inflict damages to nearby enemies when injured"
   },
   "受击次数不大于①次通关": {
+    "comment": "赖：简化",
     "translate": "being hit＜① times"
   },
   "受击次数小于①次通关": {
@@ -4062,6 +4121,7 @@
     "translate": "You can use ① Dream City Equipment Dust to synthesize a legendary equipment of the Dream City faction"
   },
   "可使用①个梦幻粉尘合成一件随机传说品质装备\n（不含疾风套装、暗夜套装、熊猫套装）": {
+    "comment": "赖：简化",
     "translate": "use ① Fantasy Dust to synthesize a legendary quality equipment\n(Excluding Fast Wind Outfit, Dark Night Outfit, Panda Outfit)"
   },
   "可使用①个洛天依自选礼包碎片合成洛天依自选礼包": {
@@ -5055,6 +5115,7 @@
     "translate": "Slime Giant"
   },
   "史诗": {
+    "comment": "赖：简化",
     "translate": "Epic"
   },
   "史诗光翼": {
@@ -5073,6 +5134,7 @@
     "translate": "Epic Light Wing Breakthrough Stone Pack"
   },
   "史诗光翼突破礼包": {
+    "comment": "赖：补充",
     "translate": "Epic Light Wing Breakthrough Offer"
   },
   "史诗宠物": {
@@ -5091,6 +5153,7 @@
     "translate": "Epic Pet Breakthrough Stone Pack"
   },
   "史诗宠物突破礼包": {
+    "comment": "赖：补充",
     "translate": "Epic Pet Breakthrough Offer"
   },
   "史诗异能石·上碎片": {
@@ -5121,6 +5184,7 @@
     "translate": "Epic Fighter Breakthrough Stone Pack"
   },
   "史诗战机突破礼包": {
+    "comment": "赖：补充",
     "translate": "Epic Fighter Breakthrough Offer"
   },
   "史诗攻击核芯": {
@@ -5157,6 +5221,7 @@
     "translate": "Epic Weapon Breakthrough Stone Pack"
   },
   "史诗武器突破礼包": {
+    "comment": "赖：补充",
     "translate": "Epic Weapon Breakthrough Offer"
   },
   "史诗生命核芯": {
@@ -5199,6 +5264,7 @@
     "translate": "Big Snake which is fed up with cooked food is in the period of teeth-grinding"
   },
   "合 成": {
+    "comment": "赖：补充",
     "translate": "synthesis"
   },
   "合成数量": {
@@ -5316,6 +5382,7 @@
     "translate": "Challenge the \"Great Adventure\" with me!"
   },
   "哇哦 ~ 得到强力技能": {
+    "comment": "赖：简化",
     "translate": "Acquire powerful skills"
   },
   "哈哈哈哈啊啊": {
@@ -5376,15 +5443,18 @@
     "translate": "Ah oh, the communication is interrupted, let me see what happened..."
   },
   "啊啊": {
+    "comment": "赖：补充",
     "translate": "Ah ah"
   },
   "啤酒": {
     "translate": "Beer"
   },
   "喊TA上线": {
+    "comment": "赖：补充",
     "translate": "Call Him"
   },
   "喊TA挑战": {
+    "comment": "赖：补充",
     "translate": "Call Him"
   },
   "喜欢户外运动的海豹，但不会游泳。": {
@@ -5487,6 +5557,7 @@
     "translate": "Bestiary Attribute"
   },
   "图鉴属性加成提升": {
+    "comment": "赖：简化",
     "translate": "attribute boost"
   },
   "图鉴等级": {
@@ -5670,6 +5741,7 @@
     "translate": "Tombstone"
   },
   "增加①min": {
+    "comment": "赖：简化",
     "translate": "+①min"
   },
   "增加主武器弹道数量": {
@@ -5685,6 +5757,7 @@
     "translate": "The acoustic wave cycle will generate extra ① super shock sonic wave"
   },
   "复仇礼包": {
+    "comment": "赖：补充",
     "translate": "revanche Offer"
   },
   "复制成功！": {
@@ -5868,6 +5941,7 @@
     "translate": "Great Secret Realm Floor ①"
   },
   "大蛇吞下食物": {
+    "comment": "赖：补充",
     "translate": "\nThe snake swallowed the food"
   },
   "大蜘蛛": {
@@ -6081,9 +6155,11 @@
     "translate": "Reward preview"
   },
   "奖励领取次数(①/②)": {
+    "comment": "赖：简化",
     "translate": "Receive reward (①/②)"
   },
   "奖励领取次数{0}": {
+    "comment": "赖：简化",
     "translate": "Receive reward {0}"
   },
   "套着游泳圈的恶魔，真是奇怪。": {
@@ -6159,6 +6235,7 @@
     "translate": "Your friend level is not enough!"
   },
   "好友管理": {
+    "comment": "赖：简化",
     "translate": "management"
   },
   "好友组队": {
@@ -6357,6 +6434,7 @@
     "translate": "Treasure Box Coupon x {0}"
   },
   "宝箱广告次数已用完": {
+    "comment": "赖：补充",
     "translate": "AD has been exhausted"
   },
   "宝箱购买次数已用完": {
@@ -6822,6 +6900,7 @@
     "translate": "Haven't entered the room yet"
   },
   "尚未通关": {
+    "comment": "赖：简化",
     "translate": "not pass"
   },
   "就这？": {
@@ -6972,6 +7051,7 @@
     "translate": "Ready"
   },
   "已切换至{0}画质\n部分设置需要重启才可生效~": {
+    "comment": "赖：补充",
     "translate": "Switched to {0} quality\nSome settings need to be restarted to take effect~"
   },
   "已删除好友!": {
@@ -7245,6 +7325,7 @@
     "translate": "The Lucky Survives"
   },
   "幸者生存：受伤后获得\"抵消①伤害的护盾\"、\"②秒内增加③伤害\"中任意一个效果": {
+    "comment": "赖：补充",
     "translate": "The Lucky Survives: After being injured, get\\offset ① damage’s shield\\\", \\\"Increase by ③ damage in ② seconds\\\" any one effect of these\""
   },
   "幸运有品": {
@@ -7305,9 +7386,11 @@
     "translate": "Spectre"
   },
   "广告冷却时间尚未结束": {
+    "comment": "赖：补充",
     "translate": "AD is on cd"
   },
   "广告复活次数已用完": {
+    "comment": "赖：补充",
     "translate": "AD has been exhausted"
   },
   "库存不足哦！": {
@@ -7326,6 +7409,7 @@
     "translate": "Turn on"
   },
   "开 始 竞 技": {
+    "comment": "赖：简化",
     "translate": "Start"
   },
   "开启可获得神秘好礼": {
@@ -7671,6 +7755,7 @@
     "translate": "Ejection Startup"
   },
   "弹射起步Lv①": {
+    "comment": "赖：补充",
     "translate": "Ejection Startup lv①"
   },
   "弹射起步lv①": {
@@ -7779,6 +7864,7 @@
     "translate": "Strong snow monster"
   },
   "强敌不是一次便能战胜的，可以反复挑战。": {
+    "comment": "赖：简化",
     "translate": "Can be challenged repeatedly."
   },
   "强敌连战": {
@@ -7818,6 +7904,7 @@
     "translate": "{0} people have passed"
   },
   "当前总星级": {
+    "comment": "赖：简化",
     "translate": "Current"
   },
   "当前房间已关闭": {
@@ -7848,6 +7935,7 @@
     "translate": "The current consumed equipment has a higher Star level. Are you sure to upgrade stars?"
   },
   "当前积分": {
+    "comment": "赖：简化",
     "translate": "Points"
   },
   "当前血量每低于上限①则增加②的暴击伤害": {
@@ -8028,6 +8116,7 @@
     "translate": "Come and help me kill the BOSS, and share the rewards!"
   },
   "快速分解": {
+    "comment": "赖：简化",
     "translate": "Quick Breakdown"
   },
   "快速加入": {
@@ -8043,6 +8132,7 @@
     "translate": "The number of available quick hang-ups rewards has reached the upper limit"
   },
   "快速选择": {
+    "comment": "赖：简化",
     "translate": "Filter"
   },
   "快速领取①小时挂机奖励": {
@@ -8247,27 +8337,34 @@
     "translate": "You cancelled WeChat authorization!"
   },
   "您因{0}，已被禁止修改昵称 解封时间：{1}": {
+    "comment": "赖：补充",
     "translate": "You have been banned from modifying your nickname due to {0}. Unblocking time: \\{1\\}"
   },
   "您因{0}，已被禁止修改签名 解禁时间：{1}": {
+    "comment": "赖：补充",
     "translate": "You have been banned from modifying your signature due to {0}. Unblocking time: \\{1\\}"
   },
   "您因{0}，已被禁止发送聊天消息 解封时间：{1}": {
+    "comment": "赖：补充",
     "translate": "You have been banned from sending chat messages due to {0} Unblocking time: \\{1\\}"
   },
   "您因{0}，已被禁止添加好友 解封时间：{1}": {
+    "comment": "赖：补充",
     "translate": "You have been banned from adding friends due to {0} Unblocking time: \\{1\\}"
   },
   "您因{0}，已被禁止进入排行 解封时间：{1}": {
+    "comment": "赖：补充",
     "translate": "You have been banned from entering the ranking due to {0} Unblocking time: \\{1\\}"
   },
   "您因{0}，账号已经被封停  解封时间：{1}": {
+    "comment": "赖：补充",
     "translate": "Your account has been suspended due to {0} Unblocking time: \\{1\\}"
   },
   "您在分解时幸运的发现了以下道具": {
     "translate": "You were lucky to find the following items during the decomposition"
   },
   "您在大冒险中提升了战力!": {
+    "comment": "赖：可能不太靠谱的简化",
     "translate": "You have increased combat power!"
   },
   "您在巅峰冲刺-极地之战的活动中排名{0}，真是太厉害了！要记得收取附件中的奖励哟。": {
@@ -8325,6 +8422,7 @@
     "translate": "You have unclaimed season mission rewards, please check"
   },
   "您本周在赛季PK中获取的赛季币已达上限(①/②)，超出上限的部分将无法获得": {
+    "comment": "赖：补充",
     "translate": "The Season Coins you can obtain in Season PK this week has reached the upper limit (①/②), and the part that exceeds the upper limit will not be obtained"
   },
   "您的{0}已无用武之地，系统帮您转化为以下道具{1}，请及时查收": {
@@ -8406,6 +8504,7 @@
     "translate": "Chengdu shadow puppetry has been passed down in the same line as folk paper-cutting, and its magical charm is enough to shock people!"
   },
   "成长复仇礼包": {
+    "comment": "赖：补充",
     "translate": "revanche Offer"
   },
   "我": {
@@ -8520,6 +8619,7 @@
     "translate": "Pre-battle sprint ① wave"
   },
   "战前补给": {
+    "comment": "赖：补充",
     "translate": "Pre battle supplies"
   },
   "战力属性": {
@@ -8658,6 +8758,7 @@
     "translate": "At the beginning of the battle, clone pet once. The cloned pet always exists; the pet's attack speed is greatly increased by ①; ② chance of triggering ③ pet skills continuously"
   },
   "战斗开始": {
+    "comment": "赖：补充",
     "translate": "Start"
   },
   "战斗时间": {
@@ -9063,6 +9164,7 @@
     "translate": "Mop-up"
   },
   "扫荡①次": {
+    "comment": "赖：简化",
     "translate": "Quick Raid"
   },
   "扫荡券": {
@@ -9174,6 +9276,7 @@
     "translate": "Pizza Ro; Very angry, very arrogant, very divided!"
   },
   "抬手放缓": {
+    "comment": "赖：简化",
     "translate": "Projectile Time"
   },
   "抽 {0} 次": {
@@ -9186,9 +9289,11 @@
     "translate": "Draw once"
   },
   "抽一次": {
+    "comment": "赖：补充",
     "translate": "open ×1"
   },
   "抽十次": {
+    "comment": "赖：补充",
     "translate": "open ×10"
   },
   "抽取①次宠物光翼扭蛋机": {
@@ -9270,6 +9375,7 @@
     "translate": "Own: {0}"
   },
   "拥有：①": {
+    "comment": "赖：补充",
     "translate": "Own：①"
   },
   "拨云见雾，冲破危机": {
@@ -9513,9 +9619,11 @@
     "translate": "Recommended server"
   },
   "推荐礼包": {
+    "comment": "赖：补充",
     "translate": "recommend Offer"
   },
   "推荐等级: {0}": {
+    "comment": "赖：简化",
     "translate": "Recommend LV: {0}"
   },
   "推送权限使用说明": {
@@ -9531,6 +9639,7 @@
     "translate": "Describe Van der Sar, and Van der Sar sends his plan"
   },
   "提 取 材 料": {
+    "comment": "赖：简化",
     "translate": "Extract"
   },
   "提 示": {
@@ -9570,6 +9679,7 @@
     "translate": "Raising the player's level can increase the upper limit of Star Stone level!"
   },
   "提高玩家等级可以提高装备等级上限哦！": {
+    "comment": "赖：简化",
     "translate": "Equipment level depend on Player‘s level"
   },
   "搓短信的手感很棒。": {
@@ -9621,6 +9731,7 @@
     "translate": "Insufficient Rename Card. Do you want to buy it in the store?"
   },
   "攻击": {
+    "comment": "赖：简化",
     "translate": "Att"
   },
   "攻击 {0}①": {
@@ -9735,6 +9846,7 @@
     "translate": "Attack core experience"
   },
   "攻击核芯经验掉落概率提升①": {
+    "comment": "赖：补充",
     "translate": "Attack the Core Drop UP"
   },
   "攻击核芯经验补给礼包": {
@@ -9867,15 +9979,18 @@
     "translate": "Data is abnormal, please log in again"
   },
   "数据校验失败[-①]": {
+    "comment": "赖：补充",
     "translate": "Data verification failed[-①]"
   },
   "数据格式错误[-①]": {
+    "comment": "赖：补充",
     "translate": "Data format error[-①]"
   },
   "数据结算中": {
     "translate": "Data checking"
   },
   "数据解密长度错误[-①]": {
+    "comment": "赖：补充",
     "translate": "Data decryption length error[-①]"
   },
   "文字赏金关": {
@@ -10194,12 +10309,14 @@
     "translate": "Do you want to clear cached resources?"
   },
   "是否立刻开始遭遇战？": {
+    "comment": "赖：可能不太靠谱的简化",
     "translate": "Start skirmish now?"
   },
   "是否立即使用道具?": {
     "translate": "Do you use the items now?"
   },
   "是否立即复活？": {
+    "comment": "赖：补充",
     "translate": "at once Resurrection?"
   },
   "是否继续上一局游戏？": {
@@ -10557,6 +10674,7 @@
     "translate": "Change avatar frame"
   },
   "更换称号": {
+    "comment": "赖：简化",
     "translate": "Rename"
   },
   "更换聊天气泡": {
@@ -10701,6 +10819,7 @@
     "translate": "The server is full. please try again later"
   },
   "服务器已满，请稍后再试[-①]": {
+    "comment": "赖：补充",
     "translate": "The server is full, please try again later[-①]"
   },
   "服务器异常": {
@@ -10710,6 +10829,7 @@
     "translate": "The server is busy, please try again later"
   },
   "服务器繁忙请稍后再试[-①]": {
+    "comment": "赖：补充",
     "translate": "The server is busy, please try again later[-①]"
   },
   "服务器繁忙，请等待{0}秒后再试": {
@@ -11133,6 +11253,7 @@
     "translate": "The core advanced materials are not enough"
   },
   "根据历史最佳的积分领取奖励": {
+    "comment": "赖：简化",
     "translate": "Claim rewards based on the points"
   },
   "根据国家相关规定，每日①:②至次日③:④未成年人不可登录游戏。 ": {
@@ -11142,6 +11263,7 @@
     "translate": "Get rewards based on the number of floors in the room"
   },
   "根据结算时段位，奖励直接发放至邮箱": {
+    "comment": "赖：简化",
     "translate": "The reward will be sent to the mailbox in the end"
   },
   "根据结算时的排名，奖励直接发放至邮箱": {
@@ -11586,6 +11708,7 @@
     "translate": "Every Tuesday"
   },
   "每周免费礼包": {
+    "comment": "赖：补充",
     "translate": "Free Weekly Offer"
   },
   "每周四": {
@@ -11718,6 +11841,7 @@
     "translate": "Number of daily tasks"
   },
   "每日免费礼包": {
+    "comment": "赖：补充",
     "translate": "Free Daily Offer"
   },
   "每日冲锋礼盒": {
@@ -11805,6 +11929,7 @@
     "translate": "Daily First Mist Level Clear Succeeded"
   },
   "每月免费礼包": {
+    "comment": "赖：补充",
     "translate": "Free Monthly Offer"
   },
   "每月礼包": {
@@ -12708,6 +12833,7 @@
     "translate": "Click Quick Join to quickly team up"
   },
   "点击想要分解的装备，分解后将返还升级材料和金币": {
+    "comment": "赖：换个行",
     "translate": "Click on the equipment you want to break down. \nUpgrade materials and gold coins will be returned after breakdown"
   },
   "点击打开扭蛋": {
@@ -12720,9 +12846,11 @@
     "translate": "Click to close"
   },
   "点击空白处跳过": {
+    "comment": "赖：补充",
     "translate": "Click to close"
   },
   "点击空白处返回": {
+    "comment": "赖：简化",
     "translate": "Tap to Continue"
   },
   "点击输入个性签名": {
@@ -12951,12 +13079,15 @@
     "translate": "Ace Pilot"
   },
   "王牌飞行员Ⅰ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Ace Ⅰ"
   },
   "王牌飞行员Ⅱ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Ace II"
   },
   "王牌飞行员Ⅲ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Ace III"
   },
   "王牌飞行员荣誉称号": {
@@ -13017,6 +13148,7 @@
     "translate": "Player Nickname"
   },
   "玩家生命越低，敌人移动速度越快，最高提升①": {
+    "comment": "赖：补充",
     "translate": "The lower the player’s HP, the faster the enemy’s speed"
   },
   "玩家生命越低，敌人速度越快": {
@@ -13026,6 +13158,7 @@
     "translate": "Player's name"
   },
   "玩家等级达到{0}级可装备": {
+    "comment": "赖：简化",
     "translate": "Unlock when Lv{0}"
   },
   "玩家等级达到①级出现首充礼包": {
@@ -13038,24 +13171,31 @@
     "translate": "Unlock when the player reaches Lv①"
   },
   "玩家等级达到①级解锁大冒险": {
+    "comment": "赖：简化",
     "translate": "LV① to unlock the Great Adventure"
   },
   "玩家等级达到①级解锁宠物光翼扭蛋": {
+    "comment": "赖：简化",
     "translate": "LV① to unlock the Pet Light Wing Capsule"
   },
   "玩家等级达到①级解锁战机武器扭蛋": {
+    "comment": "赖：简化",
     "translate": "LV① to unlock the Fighter Weapon Light Wing Capsule"
   },
   "玩家等级达到①级解锁扭蛋": {
+    "comment": "赖：简化",
     "translate": "LV① to unlock the Capsule"
   },
   "玩家等级达到①级解锁挑战模式": {
+    "comment": "赖：简化",
     "translate": "LV① to unlock the Challenge Mode"
   },
   "玩家等级达到①级解锁组队模式": {
+    "comment": "赖：简化",
     "translate": "LV① to unlock the Team Mode"
   },
   "玩家等级达到①级解锁赏金模式": {
+    "comment": "赖：简化",
     "translate": "LV① to unlock the Bounty Mode"
   },
   "玩家经验": {
@@ -13098,6 +13238,7 @@
     "translate": "It's really hard to be a pumpkin."
   },
   "生命": {
+    "comment": "赖：简化",
     "translate": "Hp"
   },
   "生命+①": {
@@ -13302,12 +13443,15 @@
     "translate": "Due to your previous outstanding performance, the system will give you a set of Power Blessing Cores. Wish you a happy game"
   },
   "由于您的信用分＜①分，存在异常或不良游戏行为，无法修改签名。": {
+    "comment": "赖：补充",
     "translate": "Since your credit score is less than ① points, there are abnormal or bad game behaviors, and the signature cannot be modified."
   },
   "由于您的信用分＜①分，存在异常或不良游戏行为，无法加好友。": {
+    "comment": "赖：补充",
     "translate": "Since your credit score is less than ① points, there are abnormal or bad game behaviors, and you cannot add friends."
   },
   "由于您的信用分＜①分，存在异常或不良游戏行为，无法发言。": {
+    "comment": "赖：补充",
     "translate": "Because your credit score is less than ① points, there are abnormal or bad game behaviors, and you cannot speak."
   },
   "申 请": {
@@ -13464,12 +13608,14 @@
     "translate": "Log in"
   },
   "登录礼包": {
+    "comment": "赖：补充",
     "translate": "Iogin Offer"
   },
   "登录队列已满": {
     "translate": "The login queue is full"
   },
   "登录队列已满，请稍后再试[-①]": {
+    "comment": "赖：补充",
     "translate": "The login queue is full, Please try again later[-①]"
   },
   "登录领取超值回归好礼!": {
@@ -13482,12 +13628,15 @@
     "translate": "The power of free riders"
   },
   "白银飞行员Ⅰ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Silver Ⅰ"
   },
   "白银飞行员Ⅱ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Silver II"
   },
   "白银飞行员Ⅲ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Silver III"
   },
   "白隼战机": {
@@ -13527,6 +13676,7 @@
     "translate": "Directly see through the grid content of Floor ①"
   },
   "直接领取": {
+    "comment": "赖：补充",
     "translate": "Gain"
   },
   "直线发射导弹，重复获得增加导弹数量": {
@@ -13653,6 +13803,7 @@
     "translate": "Are you sure you want to exit the room?"
   },
   "确定退出当前战斗？": {
+    "comment": "赖：补充",
     "translate": "withdraws from the battle?"
   },
   "确认": {
@@ -13689,6 +13840,7 @@
     "translate": "Package content"
   },
   "祝福已失效": {
+    "comment": "赖：简化",
     "translate": "expired"
   },
   "神器": {
@@ -14127,6 +14279,7 @@
     "translate": "Floor ①"
   },
   "第①层\n三星评价解锁": {
+    "comment": "赖：简化",
     "translate": "Floor ①\n3 stars unlock"
   },
   "第①层\n超过A级评价解锁": {
@@ -14154,15 +14307,18 @@
     "translate": "Chapter ① Food Paradise ②"
   },
   "第①章礼包": {
+    "comment": "赖：补充",
     "translate": "Chapter ① Offer"
   },
   "第①章章节礼包": {
+    "comment": "赖：补充",
     "translate": "Chapter ① Offer"
   },
   "第①章第②关浮岛分享": {
     "translate": "Chapter ① Chapter Level ② Floating Island Sharing"
   },
   "第①章超值礼包": {
+    "comment": "赖：补充",
     "translate": "Chapter ① Value Offer"
   },
   "第①赛季大事件": {
@@ -14250,9 +14406,11 @@
     "translate": "Simple-Chapter ①-Eastern Dream II"
   },
   "简单-第①章-东方魅影I": {
+    "comment": "赖：简化",
     "translate": "Simple-Chapter ①-Phantom East I"
   },
   "简单-第①章-东方魅影II": {
+    "comment": "赖：简化",
     "translate": "Simple-Chapter ①-Phantom East II"
   },
   "简单-第①章-古堡惊魂I": {
@@ -14364,6 +14522,7 @@
     "translate": "Essence Recycling"
   },
   "精良": {
+    "comment": "赖：简化",
     "translate": "Rare"
   },
   "精良光翼": {
@@ -14439,6 +14598,7 @@
     "translate": "Elite-Chapter ①-Eastern Dream"
   },
   "精英-第①章-东方魅影": {
+    "comment": "赖：简化",
     "translate": "Elite-Chapter ①-Phantom East"
   },
   "精英-第①章-古堡惊魂": {
@@ -14676,9 +14836,11 @@
     "translate": "Bind"
   },
   "绑定Facebook": {
+    "comment": "赖：补充",
     "translate": "Link"
   },
   "绑定GooglePlay": {
+    "comment": "赖：简化",
     "translate": "Link"
   },
   "结束战斗失败：": {
@@ -14763,6 +14925,7 @@
     "translate": "Venus Light Wing Breakthrough Stone"
   },
   "综合免费礼包": {
+    "comment": "赖：补充",
     "translate": "Free Preferential Offer"
   },
   "综合礼包": {
@@ -14880,6 +15043,7 @@
     "translate": "Old TV"
   },
   "考验操作，您的实力将会被约束在难度等级对应的战力区间": {
+    "comment": "赖：待简化",
     "translate": "It tests your gameplay. Your capability will be restricted to the combat strength range corresponding to the difficulty level"
   },
   "考验操作，您的属性将被进行数值平衡": {
@@ -15096,6 +15260,7 @@
     "translate": "Probability of getting rewards is increased"
   },
   "获得 随机技能": {
+    "comment": "赖：简化",
     "translate": "Acquire skills"
   },
   "获得<color=#ff8611>{0}min</color>开局火力MAX": {
@@ -15237,6 +15402,7 @@
     "translate": "Get the ejection Lv①"
   },
   "获得强力道具！是否使用？": {
+    "comment": "赖：简化",
     "translate": "Acquire items!"
   },
   "获得技能": {
@@ -15561,6 +15727,7 @@
     "translate": "Insufficient equipment"
   },
   "装备中": {
+    "comment": "赖：简化",
     "translate": "Equipped"
   },
   "装备冲级活动": {
@@ -15651,6 +15818,7 @@
     "translate": "Equipment Star Level: ①"
   },
   "装备最大等级": {
+    "comment": "赖：可能不太靠谱的简化",
     "translate": "Gear Max level"
   },
   "装备的特性可以强化关卡内的技能": {
@@ -15678,6 +15846,7 @@
     "translate": "To summon a ghost, you must first say its name."
   },
   "观看广告领取双倍奖励": {
+    "comment": "赖：补充",
     "translate": "Watch a video Gain doubled"
   },
   "规则说明": {
@@ -15828,18 +15997,23 @@
     "translate": "The tentacles are used to cool the central computer."
   },
   "订单未找到": {
+    "comment": "赖：补充",
     "translate": "Order not found"
   },
   "订单未支付": {
+    "comment": "赖：补充",
     "translate": "Order not paid"
   },
   "订单物品已经发送": {
+    "comment": "赖：补充",
     "translate": "Order is finished"
   },
   "订单确认失败": {
+    "comment": "赖：补充",
     "translate": "Order confirmation failed"
   },
   "订单验证失败": {
+    "comment": "赖：补充",
     "translate": "Order verification failed"
   },
   "让敌人慢下来": {
@@ -15888,6 +16062,7 @@
     "translate": "Try Bang-Bang Shotgun Slug"
   },
   "试用礼包①": {
+    "comment": "赖：补充",
     "translate": "Try Offer ①"
   },
   "试用空间锁链": {
@@ -16023,6 +16198,7 @@
     "translate": "Please invite friends after the challenge"
   },
   "请求序号错误[-①]": {
+    "comment": "赖：补充",
     "translate": "Request sequence number error[-①]"
   },
   "请求过于频繁": {
@@ -16167,6 +16343,7 @@
     "translate": "Account logging in..."
   },
   "账号验证失败": {
+    "comment": "赖：补充",
     "translate": "Verification failed"
   },
   "货币": {
@@ -16260,6 +16437,7 @@
     "translate": "Buy diamonds"
   },
   "资源产量上升": {
+    "comment": "赖：简化",
     "translate": "Output rises"
   },
   "资源更新完成": {
@@ -16569,6 +16747,7 @@
     "translate": "Until ranking settlements: ① days ② hours"
   },
   "距离结算：": {
+    "comment": "赖：简化",
     "translate": "Ends in:"
   },
   "距阵营刷新：{0}": {
@@ -16587,6 +16766,7 @@
     "translate": "Difficult path and occasionally encounters the enemy"
   },
   "跳过所有广告": {
+    "comment": "赖：补充",
     "translate": "skip all videos"
   },
   "踢出": {
@@ -16671,6 +16851,7 @@
     "translate": "A kite that is too complicated can only be hung on the wall."
   },
   "过关开启": {
+    "comment": "赖：补充",
     "translate": "Pass the Level open"
   },
   "过关遇到困难记得去升级装备哦": {
@@ -16878,6 +17059,7 @@
     "translate": "The connection is successful. The settlement is in progress..."
   },
   "连续扫荡①次": {
+    "comment": "赖：简化",
     "translate": "×5"
   },
   "连胜最高场数": {
@@ -16914,6 +17096,7 @@
     "translate": "The number of tracking missiles increased to ①"
   },
   "退 出 战 斗": {
+    "comment": "赖：简化",
     "translate": "Leave"
   },
   "退出后不能获得奖励，是否确认退出？": {
@@ -16938,12 +17121,14 @@
     "translate": "Select a level"
   },
   "选择助战好友": {
+    "comment": "赖：简化",
     "translate": "Assist friends"
   },
   "选择助战好友，可获得更高的得分加成哦！": {
     "translate": "Choose to assist friends to get a higher score bonus!"
   },
   "选择天赋同时还可以获得冒险币哦": {
+    "comment": "赖：可能不太靠谱的简化",
     "translate": "select a talent,also get adventure coins "
   },
   "选择星级": {
@@ -17145,6 +17330,7 @@
     "translate": "There are thousands of roads, but safety first."
   },
   "遭遇强敌!": {
+    "comment": "赖：简化",
     "translate": "Powerful enemy!"
   },
   "遭遇战": {
@@ -17373,6 +17559,7 @@
     "translate": "Insufficient Diamonds!"
   },
   "钻石不足，是否前往商城购买？": {
+    "comment": "赖：补充",
     "translate": "Insufficient Diamonds! Do you want to exchange it in the store?"
   },
   "钻石复活次数已用完": {
@@ -17391,24 +17578,30 @@
     "translate": "Diamond Pilot"
   },
   "钻石飞行员Ⅰ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Diamond Ⅰ"
   },
   "钻石飞行员Ⅱ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Diamond II"
   },
   "钻石飞行员Ⅲ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Diamond III"
   },
   "铂金III": {
     "translate": "Platinum III"
   },
   "铂金飞行员Ⅰ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Platinum Ⅰ"
   },
   "铂金飞行员Ⅱ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Platinum II"
   },
   "铂金飞行员Ⅲ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Platinum III"
   },
   "铜狮": {
@@ -17577,6 +17770,7 @@
     "translate": "Teammate's name"
   },
   "防御": {
+    "comment": "赖：简化",
     "translate": "Def"
   },
   "防御+①": {
@@ -17634,6 +17828,7 @@
     "translate": "Inconformity of faction"
   },
   "阵营装备可以获得加成": {
+    "comment": "赖：可能不太靠谱的简化",
     "translate": "lineup can get bonuses"
   },
   "阿冥": {
@@ -18063,6 +18258,7 @@
     "translate": "Need to have a core to unlock the system"
   },
   "需要更多的【{0}】": {
+    "comment": "赖：补充",
     "translate": "need More【{0}】"
   },
   "霸气的前脸，就问你怕不怕！": {
@@ -18072,15 +18268,19 @@
     "translate": "Bronze"
   },
   "青铜飞行员Ⅰ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Bronze I"
   },
   "青铜飞行员Ⅱ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Bronze II"
   },
   "青铜飞行员Ⅲ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Bronze III"
   },
   "青铜飞行员①": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Bronze ①"
   },
   "青鸟": {
@@ -18108,9 +18308,11 @@
     "translate": "African leader!"
   },
   "面对最终BOSS受击不大于①次通关": {
+    "comment": "赖：简化",
     "translate": "Fight with boss being hit＜① times"
   },
   "面对最终BOSS无伤通关": {
+    "comment": "赖：简化",
     "translate": "Kill the final boss without hurt"
   },
   "音    乐": {
@@ -18369,6 +18571,7 @@
     "translate": "Pass the level for the first time to get"
   },
   "首通奖励": {
+    "comment": "赖：简化",
     "translate": "Pass reward"
   },
   "首通奖励开启了，快去领取吧！": {
@@ -18534,12 +18737,15 @@
     "translate": "Gold Mine Challenge Ticket"
   },
   "黄金飞行员Ⅰ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Golden Ⅰ"
   },
   "黄金飞行员Ⅱ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Golden II"
   },
   "黄金飞行员Ⅲ": {
+    "comment": "赖：统一去掉了飞行员",
     "translate": "Golden III"
   },
   "黑洞中每增加一怪物，伤害增加①，最多提升②（怪物死亡则加成消失）": {

@@ -11,6 +11,7 @@ import (
 type Info struct {
 	Translate string `json:"translate"`
 	Source    string `json:"-"`
+	Comment   string `json:"Comment"`
 }
 
 type Infos map[string]Info
@@ -30,12 +31,12 @@ func insertToEn(k *string, v *Info, tx *sql.Tx) error {
 }
 
 func insertToMain(k *string, v *Info, tx *sql.Tx) error {
-	stmt, err := tx.Prepare("INSERT INTO main (`keyHash`, `key`, `valueHash`, `source`, useful) VALUES (?,?,?,?,?)")
+	stmt, err := tx.Prepare("INSERT INTO main (`keyHash`, `key`, `valueHash`, `source`, useful, `comment`) VALUES (?,?,?,?,?,?)")
 	if err != nil {
 		return fmt.Errorf("mysql prepare error %v", err)
 	}
 
-	_, err = stmt.Exec(StringMd5(*k), *k, StringMd5(v.Translate), v.Source, 1)
+	_, err = stmt.Exec(StringMd5(*k), *k, StringMd5(v.Translate), v.Source, 1, v.Comment)
 	if err != nil {
 		return fmt.Errorf("mysql insert error at %s %v", *k, err)
 	}
