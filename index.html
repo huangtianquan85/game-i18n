@@ -159,10 +159,18 @@
                 filtered() {
                     return this.translates.filter(function (t) {
                         let ft = app.filter;
-                        return ((ft.key.length === 0 || t.Key.indexOf(ft.key) !== -1)
-                            && (ft.value.length === 0 || ((ft.value === '@' && t.Value.length === 0) || t.Value.indexOf(ft.value) !== -1))
+                        function match(s,p) {
+                            if (p.length === 0) return true;
+                            if (p[0] == '@') return s.length === 0;
+                            if (p[0] == '#') return s.length > 0;
+                            if (p[0] == '$') return s === p.substring(1);
+                            return s.indexOf(p) !== -1;
+                        }
+
+                        return (match(t.Key, ft.key)
+                            && match(t.Value, ft.value)
                             && t.Star >= ft.star
-                            && (ft.comment.length === 0 || t.Comment.indexOf(ft.comment) !== -1)
+                            && match(t.Comment, ft.comment)
                         );
                     })
                 }
@@ -189,6 +197,7 @@
                 auto_trans() {
                     for (const t of this.auto_translate) {
                         let url = t.url.replace('<input>', this.editor.auto_trans_text)
+                        url = encodeURI(url)
                         fly.post('/auto-translate', url)
                             .then(function (response) {
                                 console.log(response.data);
