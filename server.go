@@ -28,6 +28,8 @@ func translates(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	defer rows.Close()
+
 	// scan to editor info
 	root := pb.Root{
 		Table: make(map[string]*pb.Languages),
@@ -79,6 +81,8 @@ func translatesEditor(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(500)
 		return
 	}
+
+	defer rows.Close()
 
 	// scan to editor info
 	infos := make([]editorInfo, 0)
@@ -192,6 +196,8 @@ func update(r *http.Request) error {
 	if err != nil {
 		return fmt.Errorf("query error: %v", err)
 	}
+
+	defer rows.Close()
 
 	// begin context
 	tx, err := DB.Begin()
