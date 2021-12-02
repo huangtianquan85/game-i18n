@@ -246,6 +246,40 @@ func updateSources(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleAutoTranslate(r *http.Request) ([]byte, error) {
+	url, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return nil, fmt.Errorf("auto-translate read body error: %v", err)
+	}
+
+	resp, err := http.Get(string(url))
+	if err != nil {
+		return nil, fmt.Errorf("auto-translate request error: %v", err)
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("auto-translate request error: %v", err)
+	}
+
+	return body, nil
+}
+
+// 代理自动翻译，解决跨域问题
+func autoTranslate(w http.ResponseWriter, r *http.Request) {
+	body, err := handleAutoTranslate(r)
+	if err != nil {
+		fmt.Println(err)
+		w.WriteHeader(500)
+		w.Write([]byte(err.Error()))
+	}
+
+	if body != nil {
+		w.Write(body)
+	}
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
 	body, _ := ioutil.ReadFile("index.html")
 	fmt.Fprint(w, string(body))
@@ -256,6 +290,7 @@ func StartServer() {
 	http.HandleFunc("/translates", translates)
 	http.HandleFunc("/translates-editor", translatesEditor)
 	http.HandleFunc("/update-sources", updateSources)
+	http.HandleFunc("/auto-translate", autoTranslate)
 	http.HandleFunc("/", index)
 	http.ListenAndServe("0.0.0.0:8081", nil)
 }

@@ -75,24 +75,10 @@
             </div>
             <div class="column">
                 <div>
-                    <div class="field">
-                        <label class="label">有道</label>
+                    <div class="field" v-for="t in auto_translate">
+                        <label class="label">{{ t.channel }}</label>
                         <div class="control">
-                            <textarea class="textarea" readonly v-model="editor.youdao"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Google</label>
-                        <div class="control">
-                            <textarea class="textarea" readonly v-model="editor.google"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">百度</label>
-                        <div class="control">
-                            <textarea class="textarea" readonly v-model="editor.baidu"></textarea>
+                            <textarea class="textarea" readonly v-model="t.translate"></textarea>
                         </div>
                     </div>
                 </div>
@@ -137,9 +123,7 @@
                 return {
                     translates: [],
                     editor: {
-                        youdao: '',
-                        baidu: '',
-                        google: '',
+                        auto_trans_text: '',
                         item: null,
                         copy: {
                             value: '',
@@ -152,7 +136,23 @@
                         value: '',
                         star: 0,
                         comment: '',
-                    }
+                    },
+                    auto_translate: [
+                        {
+                            channel: '有道',
+                            url: 'http://fanyi.youdao.com/translate?&doctype=json&type=AUTO&i=<input>',
+                            translate: '',
+                            handle(resp) {
+                                let data = JSON.parse(resp);
+                                return data.translateResult[0][0].tgt;
+                            }
+                        },
+                        // {
+                        //     channel: '谷歌',
+                        //     url: 'http://translate.google.cn/translate_a/single?client=gtx&dt=t&dj=1&ie=UTF-8&sl=auto&tl=en&q=<input>',
+                        //     translate: ''
+                        // },
+                    ]
                 }
             },
             computed: {
@@ -183,8 +183,22 @@
                     this.editor.copy.value = i.Value;
                     this.editor.copy.star = i.Star;
                     this.editor.copy.comment = i.Comment;
-
-                    // auto translate
+                    this.editor.auto_trans_text = i.Key;
+                    this.auto_trans();
+                },
+                auto_trans() {
+                    for (const t of this.auto_translate) {
+                        let url = t.url.replace('<input>', this.editor.auto_trans_text)
+                        fly.post('/auto-translate', url)
+                            .then(function (response) {
+                                console.log(response.data);
+                                t.translate = t.handle(response.data);
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                                alert(error);
+                            });
+                    }
                 },
                 close_editor() {
                     this.editor.item = null;
