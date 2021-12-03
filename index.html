@@ -85,6 +85,50 @@
             </div>
         </div>
 
+        <div>
+            <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="https://bulma.io">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-size='32' fill='%23e1eeef' font-family='impact' text-anchor='middle' dominant-baseline='middle'%3ETranslate%3C/text%3E%3C/svg%3E"
+                            width="168">
+                    </a>
+
+                    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                        data-target="navbarBasicExample">
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+
+                <div id="navbarBasicExample" class="navbar-menu">
+                    <div class="navbar-start">
+                        <div class="navbar-item has-dropdown is-hoverable">
+                            <a class="navbar-link">
+                                Mode
+                            </a>
+
+                            <div class="navbar-dropdown">
+                                <a class="navbar-item" @click="is_monitor_mode = false">
+                                    Search
+                                </a>
+                                <a class="navbar-item" @click="is_monitor_mode = true">
+                                    Monitor
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="navbar-item" v-if="is_monitor_mode">
+                            <input class="input" type="text" placeholder="token" v-model="monitor_token">
+                        </div>
+                        <div class="buttons" v-if="is_monitor_mode">
+                            <a class="button is-primary" @click="refresh_monitor">
+                                <strong>Refresh</strong>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </nav>
+        </div>
         <table class="table is-striped">
             <thead>
                 <tr>
@@ -93,7 +137,7 @@
                     <th> 评分 </th>
                     <th> 备注 </th>
                 </tr>
-                <tr>
+                <tr v-if="!is_monitor_mode">
                     <th> <input class="input" type="text" placeholder="筛选中文" v-model="filter.key"> </th>
                     <th> <input class="input" type="text" placeholder="筛选英文" v-model="filter.value"> </th>
                     <th> <input class="input" type="text" style="width: 50px;" v-model="filter.star"> </th>
@@ -137,6 +181,9 @@
                         star: 0,
                         comment: '',
                     },
+                    is_monitor_mode: false,
+                    monitor_token: '',
+                    monitor_keys: {},
                     auto_translate: [
                         {
                             channel: '有道',
@@ -158,8 +205,12 @@
             computed: {
                 filtered() {
                     return this.translates.filter(function (t) {
+                        if (app.is_monitor_mode) {
+                            return app.monitor_keys.hasOwnProperty(t.Key);
+                        }
+
                         let ft = app.filter;
-                        function match(s,p) {
+                        function match(s, p) {
                             if (p.length === 0) return true;
                             if (p[0] == '@') return s.length === 0;
                             if (p[0] == '#') return s.length > 0;
@@ -235,6 +286,25 @@
                             console.log(error);
                             alert(error);
                         });
+                },
+                refresh_monitor() {
+                    fly.get('/get-screen?token=' + this.monitor_token)
+                        .then(function (response) {
+                            console.log(response.data);
+                            app.set_monitor_keys(response.data);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            alert(error);
+                        });
+                },
+                set_monitor_keys(data) {
+                    let keys = {};
+                    data = JSON.parse(data);
+                    for (const k of data) {
+                        keys[k] = true;
+                    }
+                    this.monitor_keys = keys;
                 }
             },
             created() {

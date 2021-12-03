@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
 	"translate/pb"
 
@@ -252,37 +253,102 @@ func updateSources(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handleAutoTranslate(r *http.Request) ([]byte, error) {
+// 代理自动翻译，解决跨域问题
+func autoTranslate(r *http.Request) ([]byte, error) {
 	url, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		return nil, fmt.Errorf("auto-translate read body error: %v", err)
+		return nil, fmt.Errorf("read body error: %v", err)
 	}
 
 	resp, err := http.Get(string(url))
 	if err != nil {
-		return nil, fmt.Errorf("auto-translate request error: %v", err)
+		return nil, fmt.Errorf("request upstream error: %v", err)
 	}
 
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("auto-translate request error: %v", err)
+		return nil, fmt.Errorf("read upstream error: %v", err)
 	}
 
 	return body, nil
 }
 
-// 代理自动翻译，解决跨域问题
-func autoTranslate(w http.ResponseWriter, r *http.Request) {
-	body, err := handleAutoTranslate(r)
-	if err != nil {
-		fmt.Println(err)
-		w.WriteHeader(500)
-		w.Write([]byte(err.Error()))
+var screenTexts = make(map[string][]string)
+var mutex sync.Mutex
+
+// 刷新界面显示文字
+func setScreen(r *http.Request) error {
+	values := r.URL.Query()
+	token := values.Get("token")
+	if token == "" {
+		return fmt.Errorf("token can not empty")
 	}
 
-	if body != nil {
-		w.Write(body)
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return fmt.Errorf("read body error: %v", err)
+	}
+
+	// unmarshal
+	var keys []string
+	err = json.Unmarshal(body, &keys)
+	if err != nil {
+		return fmt.Errorf("unmarshal error: %v", err)
+	}
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	screenTexts[token] = keys
+
+	return nil
+}
+
+// 接收界面显示文字
+func getScreen(r *http.Request) ([]byte, error) {
+	values := r.URL.Query()
+	token := values.Get("token")
+	if token == "" {
+		return nil, fmt.Errorf("token can not empty")
+	}
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	if texts, ok := screenTexts[token]; ok {
+		body, err := json.Marshal(texts)
+		if err != nil {
+			return nil, fmt.Errorf("marshal error: %v", err)
+		}
+		return body, nil
+	}
+
+	return nil, nil
+}
+
+func makeSimpleHandler(tag string, handler func(*http.Request) error) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if err := handler(r); err != nil {
+			fmt.Println(err)
+			w.WriteHeader(500)
+			w.Write([]byte(tag + " => " + err.Error()))
+		}
+	}
+}
+
+func makeBodyHandler(tag string, handler func(*http.Request) ([]byte, error)) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, err := handler(r)
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(500)
+			w.Write([]byte(tag + " => " + err.Error()))
+		}
+
+		if body != nil {
+			w.Write(body)
+		}
 	}
 }
 
@@ -296,7 +362,9 @@ func StartServer() {
 	http.HandleFunc("/translates", translates)
 	http.HandleFunc("/translates-editor", translatesEditor)
 	http.HandleFunc("/update-sources", updateSources)
-	http.HandleFunc("/auto-translate", autoTranslate)
+	http.HandleFunc("/auto-translate", makeBodyHandler("auto-translate", autoTranslate))
+	http.HandleFunc("/get-screen", makeBodyHandler("get-screen", getScreen))
+	http.HandleFunc("/set-screen", makeSimpleHandler("set-screen", setScreen))
 	http.HandleFunc("/", index)
 	http.ListenAndServe("0.0.0.0:8081", nil)
 }
