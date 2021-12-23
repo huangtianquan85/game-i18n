@@ -17,6 +17,10 @@
             top: 10%;
             left: 5%;
         }
+
+        strong {
+            color: rgb(240, 100, 100);
+        }
     </style>
 </head>
 
@@ -150,7 +154,7 @@
                         <div class="block">{{ i.Key }}</div>
                     </td>
                     <td style="width: 400px;" @click="edit(i)">
-                        <div class="block">{{ i.Value }}</div>
+                        <div class="block" v-html="high_light(i.Value, filter.value)"></div>
                     </td>
                     <td style="text-align: center; vertical-align: middle;"> {{ i.Star }}</td>
                     <td style="width: 300px;" @click="edit(i)">
@@ -305,6 +309,10 @@
                         keys[k] = true;
                     }
                     this.monitor_keys = keys;
+                },
+                high_light(v, p) {// value, pattern
+                    if (p.length === 0 || p[0] == '@' || p[0] == '#' || p[0] == '$') return v;
+                    return v.replace(p, '<strong>' + p + '</strong>');
                 }
             },
             created() {
