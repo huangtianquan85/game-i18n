@@ -128,6 +128,14 @@
                                 <strong>Refresh</strong>
                             </a>
                         </div>
+                        <div class="navbar-item" v-if="!is_monitor_mode">
+                            <input class="input" type="text" placeholder="replace words" v-model="batch_replace">
+                        </div>
+                        <div class="buttons" v-if="!is_monitor_mode">
+                            <a class="button is-primary" @click="batch_commit">
+                                <strong>Replace All !!!CAUTION!!!</strong>
+                            </a>
+                        </div>
                     </div>
 
                 </div>
@@ -188,6 +196,7 @@
                     is_monitor_mode: false,
                     monitor_token: '',
                     monitor_keys: {},
+                    batch_replace: '',
                     auto_translate: [
                         {
                             channel: '有道',
@@ -212,25 +221,26 @@
                         if (app.is_monitor_mode) {
                             return app.monitor_keys.hasOwnProperty(t.Key);
                         }
-
-                        let ft = app.filter;
-                        function match(s, p) {
-                            if (p.length === 0) return true;
-                            if (p[0] == '@') return s.length === 0;
-                            if (p[0] == '#') return s.length > 0;
-                            if (p[0] == '$') return s === p.substring(1);
-                            return s.indexOf(p) !== -1;
-                        }
-
-                        return (match(t.Key, ft.key)
-                            && match(t.Value, ft.value)
-                            && t.Star >= ft.star
-                            && match(t.Comment, ft.comment)
-                        );
+                        return app.filter_func(t);
                     })
                 }
             },
             methods: {
+                match(s, p) {
+                    if (p.length === 0) return true;
+                    if (p[0] == '@') return s.length === 0;
+                    if (p[0] == '#') return s.length > 0;
+                    if (p[0] == '$') return s === p.substring(1);
+                    return s.indexOf(p) !== -1;
+                },
+                filter_func(t) {
+                    let ft = this.filter;
+                    return (this.match(t.Key, ft.key)
+                        && this.match(t.Value, ft.value)
+                        && t.Star >= ft.star
+                        && this.match(t.Comment, ft.comment)
+                    );
+                },
                 load() {
                     fly.get('/translates-editor')
                         .then(function (response) {
@@ -291,6 +301,42 @@
                             alert(error);
                         });
                 },
+                ignore_replace() {
+                    let p = this.filter.value;
+                    if (p.length === 0 || p[0] == '@' || p[0] == '#' || p[0] == '$') return true;
+                    return false;
+                },
+                batch_commit() {
+                    if (this.ignore_replace()) return;
+
+                    let items = [];
+                    let commit = [];
+                    let pattern = this.filter.value;
+                    let replace = this.batch_replace;
+                    for (const t of this.translates) {
+                        if (this.filter_func(t)) {
+                            items.push(t);
+                            commit.push({
+                                Key: t.Key,
+                                Value: t.Value.replaceAll(pattern, replace),
+                                Star: t.star,
+                                Comment: t.comment,
+                            });
+                        }
+                    }
+
+                    // TODO: prevent user action
+                    fly.post('/commit-translate', commit)
+                        .then(function (response) {
+                            for (const t of items) {
+                                t.Value = t.Value.replaceAll(pattern, replace);
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            alert(error);
+                        });
+                },
                 refresh_monitor() {
                     fly.get('/get-screen?token=' + this.monitor_token)
                         .then(function (response) {
@@ -311,8 +357,8 @@
                     this.monitor_keys = keys;
                 },
                 high_light(v, p) {// value, pattern
-                    if (p.length === 0 || p[0] == '@' || p[0] == '#' || p[0] == '$') return v;
-                    return v.replace(p, '<strong>' + p + '</strong>');
+                    if (this.ignore_replace()) return v;
+                    return v.replaceAll(p, '<strong>' + p + '</strong>');
                 }
             },
             created() {
