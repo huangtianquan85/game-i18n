@@ -132,8 +132,8 @@ func commit(r *http.Request) error {
 	}
 
 	// unmarshal
-	var t commitInfo
-	err = json.Unmarshal(body, &t)
+	items := make([]commitInfo, 0)
+	err = json.Unmarshal(body, &items)
 	if err != nil {
 		return fmt.Errorf("commit-translate unmarshal error: %v", err)
 	}
@@ -144,18 +144,20 @@ func commit(r *http.Request) error {
 		return fmt.Errorf("context begin error: %v", err)
 	}
 
-	// insert to en
-	cmd := "insert ignore into `en` (`keyHash`, `valueHash`, `value`, timestamp, userId) values (?,?,?,?,?);"
-	_, err = tx.Exec(cmd, StringMd5(t.Key), StringMd5(t.Value), t.Value, time.Now().UnixNano(), 0)
-	if err != nil {
-		return fmt.Errorf("insert error: %v", err)
-	}
+	for _, t := range items {
+		// insert to en
+		cmd := "insert ignore into `en` (`keyHash`, `valueHash`, `value`, timestamp, userId) values (?,?,?,?,?);"
+		_, err = tx.Exec(cmd, StringMd5(t.Key), StringMd5(t.Value), t.Value, time.Now().UnixNano(), 0)
+		if err != nil {
+			return fmt.Errorf("insert error: %v", err)
+		}
 
-	// update main
-	cmd = "UPDATE main SET main.valueHash=?, main.star=?, main.comment=? WHERE main.keyHash=?"
-	_, err = tx.Exec(cmd, StringMd5(t.Value), t.Star, t.Comment, StringMd5(t.Key))
-	if err != nil {
-		return fmt.Errorf("update error: %v", err)
+		// update main
+		cmd = "UPDATE main SET main.valueHash=?, main.star=?, main.comment=? WHERE main.keyHash=?"
+		_, err = tx.Exec(cmd, StringMd5(t.Value), t.Star, t.Comment, StringMd5(t.Key))
+		if err != nil {
+			return fmt.Errorf("update error: %v", err)
+		}
 	}
 
 	// commit

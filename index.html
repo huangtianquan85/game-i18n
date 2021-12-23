@@ -267,12 +267,12 @@
                     let editor = this.editor;
                     let copy = editor.copy;
                     let item = editor.item;
-                    let commit = {
+                    let commit = [{
                         Key: item.Key,
                         Value: copy.value,
                         Star: copy.star,
                         Comment: copy.comment,
-                    }
+                    }]
 
                     // TODO: prevent user action
                     fly.post('/commit-translate', commit)
