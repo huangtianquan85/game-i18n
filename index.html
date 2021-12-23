@@ -308,11 +308,16 @@
                 },
                 batch_commit() {
                     if (this.ignore_replace()) return;
+                    if (this.batch_replace.length == 0) return;
 
                     let items = [];
                     let commit = [];
                     let pattern = this.filter.value;
                     let replace = this.batch_replace;
+
+                    let ok = confirm('Replace All:\n' + pattern + '\nTo:\n' + replace);
+                    if (!ok) return;
+
                     for (const t of this.translates) {
                         if (this.filter_func(t)) {
                             items.push(t);
