@@ -222,6 +222,12 @@ func commitTranslate(r *http.Request) error {
 
 // 更新翻译需求
 func updateSources(r *http.Request) error {
+	values := r.URL.Query()
+	branch := values.Get("branch")
+	if branch == "" {
+		return fmt.Errorf("branch can not empty")
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return fmt.Errorf("update-sources read body error: %v", err)
@@ -237,7 +243,12 @@ func updateSources(r *http.Request) error {
 	m := f.(map[string]interface{})
 
 	// query all rows
-	queryCmd := "SELECT `main`.`key`, `main`.`useful` from main;"
+	queryCmd := strings.ReplaceAll(`
+	SELECT key_info.key, branch_<branch>.useful 
+	FROM branch_<branch> 
+	LEFT JOIN key_info 
+	ON key_info.keyHash = branch_<branch>.keyHash;
+	`, "<branch>", branch)
 	rows, err := DB.Query(queryCmd)
 	if err != nil {
 		return fmt.Errorf("query error: %v", err)
@@ -253,6 +264,7 @@ func updateSources(r *http.Request) error {
 
 	// find useless items
 	dbItems := make(map[string]bool)
+	cmd := strings.ReplaceAll("UPDATE branch_<branch> SET useful=? WHERE keyHash=?", "<branch>", branch)
 	for rows.Next() {
 		var key string
 		var useful int
@@ -262,20 +274,25 @@ func updateSources(r *http.Request) error {
 		_, ok := m[key]
 		if (useful == 1) != ok { // 状态不一样
 			useful = 1 - useful
-			tx.Exec("UPDATE main SET main.useful=? WHERE main.keyHash=?", useful, StringMd5(key))
+			tx.Exec(cmd, useful, StringMd5(key))
 			if err != nil {
 				return fmt.Errorf("update useful error: %v", err)
 			}
 		}
 	}
 
-	// insert to main
-	cmd := "INSERT ignore INTO main (`keyHash`, `key`, `valueHash`, `source`, useful) VALUES (?,?,?,?,?);"
+	// insert to branch_<branch>
+	cmd = strings.ReplaceAll("INSERT ignore INTO branch_<branch> (`keyHash`, `source`, useful) VALUES (?,?,?);", "<branch>", branch)
 	for k := range m {
+		keyHash := StringMd5(k)
 		if _, ok := dbItems[k]; !ok {
-			_, err = tx.Exec(cmd, StringMd5(k), k, StringMd5(""), "", 1)
+			_, err = tx.Exec(cmd, keyHash, "", 1)
 			if err != nil {
-				return fmt.Errorf("insert new item error: %v", err)
+				return fmt.Errorf("insert new item to branch_%s error: %v", branch, err)
+			}
+			_, err = tx.Exec("INSERT ignore INTO key_info (`keyHash`, `key`) VALUES (?,?);", keyHash, k)
+			if err != nil {
+				return fmt.Errorf("insert new item to key_info error: %v", err)
 			}
 		}
 	}
