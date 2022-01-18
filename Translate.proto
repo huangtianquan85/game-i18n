@@ -8,4 +8,5 @@ message Languages {
 
 message Root {
   map<string, Languages> Table = 1;
+  map<string, uint32> Langs = 2;
 }

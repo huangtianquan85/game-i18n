@@ -14,14 +14,43 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+var langs = []string{
+	"en",
+	"ge",
+}
+
 // 获取用于打包的翻译信息
 func translates(r *http.Request) ([]byte, error) {
-	queryCmd := `
-	SELECT m.key, en.value FROM 
-		(SELECT * FROM main WHERE main.useful = 1) as m 
-		LEFT JOIN en 
-		ON m.keyhash = en.keyHash and m.valueHash = en.valueHash;
-	`
+	// 判断分支
+	values := r.URL.Query()
+	branch := values.Get("branch")
+	if branch == "" {
+		return nil, fmt.Errorf("branch can not empty")
+	}
+
+	// 生成各语言字段
+	fields := make([]string, 0)
+	for _, l := range langs {
+		fields = append(fields, fmt.Sprintf("history_%s.value", l))
+	}
+
+	// 按照分支筛选
+	queryCmd := fmt.Sprintf(`
+	SELECT key_info.key, %s 
+	FROM
+	(SELECT keyhash FROM branch_%s WHERE useful = 1) 
+	as selection
+	LEFT JOIN key_info ON selection.keyhash = key_info.keyhash`,
+		strings.Join(fields, ", "), branch)
+
+	// 生成各语言 Join 语句
+	for _, l := range langs {
+		queryCmd += strings.ReplaceAll(`
+	LEFT JOIN mapping_<lang> ON selection.keyhash = mapping_<lang>.keyhash
+	LEFT JOIN history_<lang> ON mapping_<lang>.keyhash = history_<lang>.keyHash and mapping_<lang>.valueHash = history_<lang>.valueHash`,
+			"<lang>", l)
+	}
+
 	// query all useful rows
 	rows, err := DB.Query(queryCmd)
 	if err != nil {
@@ -30,17 +59,31 @@ func translates(r *http.Request) ([]byte, error) {
 
 	defer rows.Close()
 
-	// scan to editor info
+	// scan to pb
 	root := pb.Root{
 		Table: make(map[string]*pb.Languages),
+		Langs: make(map[string]uint32),
 	}
+
 	var key string
-	var value string
 	for rows.Next() {
-		rows.Scan(&key, &value)
-		root.Table[key] = &pb.Languages{
-			Translate: []string{value},
+		values := make([]string, len(langs))
+		points := make([]interface{}, len(langs)+1)
+		points[0] = &key
+
+		for i := range langs {
+			points[i+1] = &values[i]
 		}
+
+		rows.Scan(points...)
+
+		root.Table[key] = &pb.Languages{
+			Translate: values,
+		}
+	}
+
+	for i, l := range langs {
+		root.Langs[l] = uint32(i)
 	}
 
 	// convert to pb
