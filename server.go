@@ -14,7 +14,7 @@ import (
 )
 
 // 获取用于打包的翻译信息
-func translates(w http.ResponseWriter, r *http.Request) {
+func translates(r *http.Request) ([]byte, error) {
 	queryCmd := `
 	SELECT m.key, en.value FROM 
 		(SELECT * FROM main WHERE main.useful = 1) as m 
@@ -24,9 +24,7 @@ func translates(w http.ResponseWriter, r *http.Request) {
 	// query all useful rows
 	rows, err := DB.Query(queryCmd)
 	if err != nil {
-		fmt.Fprintln(w, "query error", err)
-		w.WriteHeader(500)
-		return
+		return nil, fmt.Errorf("query error: %v", err)
 	}
 
 	defer rows.Close()
@@ -47,12 +45,10 @@ func translates(w http.ResponseWriter, r *http.Request) {
 	// convert to pb
 	data, err := proto.Marshal(&root)
 	if err != nil {
-		fmt.Fprintln(w, "marshal error", err)
-		w.WriteHeader(500)
-		return
+		return nil, fmt.Errorf("marshal error: %v", err)
 	}
 
-	w.Write(data)
+	return data, nil
 }
 
 type editorInfo struct {
@@ -68,7 +64,15 @@ type editorInfo struct {
 }
 
 // 获取用于编辑器的翻译信息
-func translatesEditor(w http.ResponseWriter, r *http.Request) {
+func translatesEditor(r *http.Request) ([]byte, error) {
+	values := r.URL.Query()
+	branch := values.Get("branch")
+	lang := values.Get("lang")
+
+	if branch == "" || lang == "" {
+		return nil, fmt.Errorf("branch and lang can not empty")
+	}
+
 	queryCmd := `
 	SELECT m.keyHash, m.key, m.valuehash, m.source, m.star, m.comment, en.value, en.timestamp, en.userId FROM 
 		(SELECT * FROM main WHERE main.useful = 1) as m 
@@ -78,9 +82,7 @@ func translatesEditor(w http.ResponseWriter, r *http.Request) {
 	// query all useful rows
 	rows, err := DB.Query(queryCmd)
 	if err != nil {
-		fmt.Fprintln(w, "query error", err)
-		w.WriteHeader(500)
-		return
+		return nil, fmt.Errorf("query error: %v", err)
 	}
 
 	defer rows.Close()
@@ -106,13 +108,10 @@ func translatesEditor(w http.ResponseWriter, r *http.Request) {
 	// convert to json
 	data, err := json.Marshal(infos)
 	if err != nil {
-		fmt.Fprintln(w, "marshal error", err)
-		w.WriteHeader(500)
-		return
+		return nil, fmt.Errorf("marshal error: %v", err)
 	}
 
-	w.Header().Set("content-type", "text/json")
-	w.Write(data)
+	return data, nil
 }
 
 // 获取一个翻译的所有历史
@@ -125,7 +124,8 @@ type commitInfo struct {
 	Comment string
 }
 
-func commit(r *http.Request) error {
+// 提交翻译
+func commitTranslate(r *http.Request) error {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return fmt.Errorf("commit-translate read body error: %v", err)
@@ -169,16 +169,8 @@ func commit(r *http.Request) error {
 	return nil
 }
 
-// 提交翻译
-func commitTranslate(w http.ResponseWriter, r *http.Request) {
-	if err := commit(r); err != nil {
-		fmt.Println(err)
-		w.WriteHeader(500)
-		w.Write([]byte(err.Error()))
-	}
-}
-
-func update(r *http.Request) error {
+// 更新翻译需求
+func updateSources(r *http.Request) error {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return fmt.Errorf("update-sources read body error: %v", err)
@@ -244,15 +236,6 @@ func update(r *http.Request) error {
 	}
 
 	return nil
-}
-
-// 更新翻译需求
-func updateSources(w http.ResponseWriter, r *http.Request) {
-	if err := update(r); err != nil {
-		fmt.Println(err)
-		w.WriteHeader(500)
-		w.Write([]byte(err.Error()))
-	}
 }
 
 // 代理自动翻译，解决跨域问题
@@ -329,18 +312,20 @@ func getScreen(r *http.Request) ([]byte, error) {
 	return nil, nil
 }
 
-func makeSimpleHandler(tag string, handler func(*http.Request) error) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
+func addHttpSimpleHandler(tag string, handler func(*http.Request) error) {
+	f := func(w http.ResponseWriter, r *http.Request) {
 		if err := handler(r); err != nil {
 			fmt.Println(err)
 			w.WriteHeader(500)
 			w.Write([]byte(tag + " => " + err.Error()))
 		}
 	}
+
+	http.HandleFunc("/"+tag, f)
 }
 
-func makeBodyHandler(tag string, handler func(*http.Request) ([]byte, error)) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
+func addHttpBodyHandler(tag string, handler func(*http.Request) ([]byte, error)) {
+	f := func(w http.ResponseWriter, r *http.Request) {
 		body, err := handler(r)
 		if err != nil {
 			fmt.Println(err)
@@ -352,6 +337,8 @@ func makeBodyHandler(tag string, handler func(*http.Request) ([]byte, error)) fu
 			w.Write(body)
 		}
 	}
+
+	http.HandleFunc("/"+tag, f)
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -360,13 +347,13 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func StartServer() {
-	http.HandleFunc("/commit-translate", commitTranslate)
-	http.HandleFunc("/translates", translates)
-	http.HandleFunc("/translates-editor", translatesEditor)
-	http.HandleFunc("/update-sources", updateSources)
-	http.HandleFunc("/auto-translate", makeBodyHandler("auto-translate", autoTranslate))
-	http.HandleFunc("/get-screen", makeBodyHandler("get-screen", getScreen))
-	http.HandleFunc("/set-screen", makeSimpleHandler("set-screen", setScreen))
+	addHttpSimpleHandler("commit-translate", commitTranslate)
+	addHttpBodyHandler("translates", translates)
+	addHttpBodyHandler("translates-editor", translatesEditor)
+	addHttpSimpleHandler("update-sources", updateSources)
+	addHttpBodyHandler("auto-translate", autoTranslate)
+	addHttpBodyHandler("get-screen", getScreen)
+	addHttpSimpleHandler("set-screen", setScreen)
 	http.HandleFunc("/", index)
 	http.ListenAndServe("0.0.0.0:8081", nil)
 }

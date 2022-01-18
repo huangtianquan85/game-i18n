@@ -11,7 +11,7 @@ import (
 var DB *sql.DB
 
 /*
-create table en (
+create table <history_lang> (
     `keyHash` char(32) not null,
 	`valueHash` char(32) not null,
     `value` varchar(4096) not null,
@@ -20,14 +20,22 @@ create table en (
 	primary key (`keyHash`, `valueHash`)
 ) engine=innodb default charset=utf8;
 
-create table main (
+create table <mapping_lang> (
     `keyhash` char(32) not null primary key,
-	`key` varchar(4096) not null,
 	`valueHash` char(32) not null,
-    `source` varchar(512) not null,
-    `useful` tinyint not null,
 	`star` tinyint not null default 0,
 	`comment` varchar(1024) not null default ''
+) engine=innodb default charset=utf8;
+
+create table key_info (
+    `keyhash` char(32) not null primary key,
+	`key` varchar(4096) not null
+) engine=innodb default charset=utf8;
+
+create table <branch_name> (
+    `keyhash` char(32) not null primary key,
+    `source` varchar(512) not null,
+    `useful` tinyint not null
 ) engine=innodb default charset=utf8;
 */
 
