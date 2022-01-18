@@ -311,7 +311,7 @@
                     }]
 
                     // TODO: prevent user action
-                    fly.post('/commit-translate', commit)
+                    fly.post(`/commit-translate?lang=${this.language}`, commit)
                         .then(function (response) {
                             item.Value = copy.value;
                             item.Star = copy.star;
@@ -353,7 +353,7 @@
                     }
 
                     // TODO: prevent user action
-                    fly.post('/commit-translate', commit)
+                    fly.post(`/commit-translate?lang=${this.language}`, commit)
                         .then(function (response) {
                             for (const t of items) {
                                 t.Value = t.Value.replaceAll(pattern, replace);

@@ -177,6 +177,12 @@ type commitInfo struct {
 
 // 提交翻译
 func commitTranslate(r *http.Request) error {
+	values := r.URL.Query()
+	lang := values.Get("lang")
+	if lang == "" {
+		return fmt.Errorf("lang can not empty")
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return fmt.Errorf("commit-translate read body error: %v", err)
@@ -196,16 +202,20 @@ func commitTranslate(r *http.Request) error {
 	}
 
 	for _, t := range items {
-		// insert to en
-		cmd := "insert ignore into `en` (`keyHash`, `valueHash`, `value`, timestamp, userId) values (?,?,?,?,?);"
+		// insert to history
+		cmd := fmt.Sprintf("insert ignore into `history_%s` (`keyHash`, `valueHash`, `value`, timestamp, userId) values (?,?,?,?,?);", lang)
 		_, err = tx.Exec(cmd, StringMd5(t.Key), StringMd5(t.Value), t.Value, time.Now().UnixNano(), 0)
 		if err != nil {
 			return fmt.Errorf("insert error: %v", err)
 		}
 
-		// update main
-		cmd = "UPDATE main SET main.valueHash=?, main.star=?, main.comment=? WHERE main.keyHash=?"
-		_, err = tx.Exec(cmd, StringMd5(t.Value), t.Star, t.Comment, StringMd5(t.Key))
+		// update mapping
+		cmd = fmt.Sprintf(`
+		INSERT INTO mapping_%s (keyHash, valueHash, star, comment)
+		VALUES (?,?,?,?)
+		ON DUPLICATE KEY
+		UPDATE valueHash=VALUES(valueHash), star=VALUES(star), comment=VALUES(comment)`, lang)
+		_, err = tx.Exec(cmd, StringMd5(t.Key), StringMd5(t.Value), t.Star, t.Comment)
 		if err != nil {
 			return fmt.Errorf("update error: %v", err)
 		}
