@@ -21,19 +21,19 @@ create table <history_lang> (
 ) engine=innodb default charset=utf8;
 
 create table <mapping_lang> (
-    `keyhash` char(32) not null primary key,
+    `keyHash` char(32) not null primary key,
 	`valueHash` char(32) not null,
 	`star` tinyint not null default 0,
 	`comment` varchar(1024) not null default ''
 ) engine=innodb default charset=utf8;
 
 create table key_info (
-    `keyhash` char(32) not null primary key,
+    `keyHash` char(32) not null primary key,
 	`key` varchar(4096) not null
 ) engine=innodb default charset=utf8;
 
 create table <branch_name> (
-    `keyhash` char(32) not null primary key,
+    `keyHash` char(32) not null primary key,
     `source` varchar(512) not null,
     `useful` tinyint not null
 ) engine=innodb default charset=utf8;

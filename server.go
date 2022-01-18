@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 	"translate/pb"
@@ -74,11 +75,18 @@ func translatesEditor(r *http.Request) ([]byte, error) {
 	}
 
 	queryCmd := `
-	SELECT m.keyHash, m.key, m.valuehash, m.source, m.star, m.comment, en.value, en.timestamp, en.userId FROM 
-		(SELECT * FROM main WHERE main.useful = 1) as m 
-		LEFT JOIN en 
-		ON m.keyhash = en.keyHash and m.valueHash = en.valueHash;
+	SELECT selection.keyHash, key_info.key, <mapping>.valueHash, selection.source, <mapping>.star, <mapping>.comment, <history>.value, <history>.timestamp, <history>.userId
+	FROM
+	(SELECT * FROM <branch> WHERE useful = 1) 
+	as selection
+	LEFT JOIN key_info ON selection.keyHash = key_info.keyHash
+	LEFT JOIN <mapping> ON selection.keyHash = <mapping>.keyHash
+	LEFT JOIN <history> ON <mapping>.keyHash = <history>.keyHash and <mapping>.valueHash = <history>.valueHash
 	`
+	queryCmd = strings.ReplaceAll(queryCmd, "<branch>", "branch_"+branch)
+	queryCmd = strings.ReplaceAll(queryCmd, "<mapping>", "mapping_"+lang)
+	queryCmd = strings.ReplaceAll(queryCmd, "<history>", "history_"+lang)
+
 	// query all useful rows
 	rows, err := DB.Query(queryCmd)
 	if err != nil {

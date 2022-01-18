@@ -261,8 +261,10 @@
                 load() {
                     this.branch = loadPageVar('branch');
                     this.language = loadPageVar('lang');
-                    
-                    fly.get(`/translates-editor?branch=${this.branch}&lang=${this.language}`)
+                    fly.get(`/translates-editor?branch=${this.branch}&lang=${this.language}`,
+                        null, {
+                        responseType: 'json'
+                    })
                         .then(function (response) {
                             app.translates = response.data;
                         })
