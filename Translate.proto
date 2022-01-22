@@ -6,7 +6,13 @@ message Languages {
     repeated string Translate = 1;
 }
 
+message LanguageInfo {
+    int32 Index = 1;
+    string ShowName = 2;
+    repeated string UnityEnums = 3;
+}
+
 message Root {
   map<string, Languages> Table = 1;
-  map<string, uint32> Langs = 2;
+  map<string, LanguageInfo> Langs = 2;
 }

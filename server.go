@@ -25,15 +25,27 @@ func translates(r *http.Request) ([]byte, error) {
 
 	// 获取语言列表
 	langs := make([]string, 0)
+	langInfos := make(map[string]*pb.LanguageInfo)
 	rows, err := DB.Query("SELECT * from languages;")
 	if err != nil {
 		return nil, fmt.Errorf("query error: %v", err)
 	}
 
 	for rows.Next() {
-		var lang string
-		rows.Scan(&lang)
-		langs = append(langs, lang)
+		var tableName string
+		var showName string
+		var unityEnum string
+		rows.Scan(&tableName, &showName, &unityEnum)
+		info := &pb.LanguageInfo{}
+		if tableName == "zh-cn" {
+			info.Index = -1
+		} else {
+			info.Index = int32(len(langs))
+			langs = append(langs, tableName)
+		}
+		info.ShowName = showName
+		info.UnityEnums = strings.Split(unityEnum, ",")
+		langInfos[tableName] = info
 	}
 
 	// 生成各语言字段
@@ -70,7 +82,7 @@ func translates(r *http.Request) ([]byte, error) {
 	// scan to pb
 	root := pb.Root{
 		Table: make(map[string]*pb.Languages),
-		Langs: make(map[string]uint32),
+		Langs: langInfos,
 	}
 
 	var key string
@@ -88,10 +100,6 @@ func translates(r *http.Request) ([]byte, error) {
 		root.Table[key] = &pb.Languages{
 			Translate: values,
 		}
-	}
-
-	for i, l := range langs {
-		root.Langs[l] = uint32(i)
 	}
 
 	// convert to pb

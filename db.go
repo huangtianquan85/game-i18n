@@ -12,7 +12,9 @@ var DB *sql.DB
 
 /*
 create table languages (
-    `name` char(32) not null primary key
+    `tableName` varchar(32) not null primary key,
+	`showName` varchar(32) not null,
+    `unityEnum` varchar(256) not null
 ) engine=innodb default charset=utf8;
 
 create table <history_lang> (
