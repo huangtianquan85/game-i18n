@@ -14,11 +14,6 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-var langs = []string{
-	"en",
-	"ge",
-}
-
 // 获取用于打包的翻译信息
 func translates(r *http.Request) ([]byte, error) {
 	// 判断分支
@@ -26,6 +21,19 @@ func translates(r *http.Request) ([]byte, error) {
 	branch := values.Get("branch")
 	if branch == "" {
 		return nil, fmt.Errorf("branch can not empty")
+	}
+
+	// 获取语言列表
+	langs := make([]string, 0)
+	rows, err := DB.Query("SELECT * from languages;")
+	if err != nil {
+		return nil, fmt.Errorf("query error: %v", err)
+	}
+
+	for rows.Next() {
+		var lang string
+		rows.Scan(&lang)
+		langs = append(langs, lang)
 	}
 
 	// 生成各语言字段
@@ -52,7 +60,7 @@ func translates(r *http.Request) ([]byte, error) {
 	}
 
 	// query all useful rows
-	rows, err := DB.Query(queryCmd)
+	rows, err = DB.Query(queryCmd)
 	if err != nil {
 		return nil, fmt.Errorf("query error: %v", err)
 	}

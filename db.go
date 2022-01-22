@@ -11,6 +11,10 @@ import (
 var DB *sql.DB
 
 /*
+create table languages (
+    `name` char(32) not null primary key
+) engine=innodb default charset=utf8;
+
 create table <history_lang> (
     `keyHash` char(32) not null,
 	`valueHash` char(32) not null,
