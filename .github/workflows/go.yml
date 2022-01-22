@@ -17,7 +17,7 @@ jobs:
         go-version: 1.17
 
     - name: Build Go
-      run: go build
+      run: CGO_ENABLED=0 go build
 
     - name: Build the Docker Image
       run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_TAG }}
