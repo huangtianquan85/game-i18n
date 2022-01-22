@@ -18,7 +18,7 @@ jobs:
 
     - name: Build Go
       run: |
-        go build -v ./...
+        go build
         ls -al
 
     # - name: Build the Docker Image
