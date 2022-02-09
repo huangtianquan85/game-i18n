@@ -26,7 +26,7 @@ func translates(r *http.Request) ([]byte, error) {
 	// 获取语言列表
 	langs := make([]string, 0)
 	langInfos := make(map[string]*pb.LanguageInfo)
-	rows, err := DB.Query("SELECT * from languages;")
+	rows, err := DB.Query("SELECT * from languages ORDER BY `showOrder`;")
 	if err != nil {
 		return nil, fmt.Errorf("query error: %v", err)
 	}
@@ -35,7 +35,8 @@ func translates(r *http.Request) ([]byte, error) {
 		var tableName string
 		var showName string
 		var unityEnum string
-		rows.Scan(&tableName, &showName, &unityEnum)
+		var showIndex int
+		rows.Scan(&tableName, &showName, &unityEnum, &showIndex)
 		info := &pb.LanguageInfo{}
 		if tableName == "zh-cn" {
 			info.Index = -1
