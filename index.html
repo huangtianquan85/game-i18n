@@ -162,13 +162,15 @@
             <thead>
                 <tr>
                     <th> 中文 </th>
-                    <th> 英文 </th>
+                    <th> {{ language.toUpperCase() }} </th>
+                    <th v-if="language !== 'en'"> 英文 </th>
                     <th> 评分 </th>
                     <th> 备注 </th>
                 </tr>
                 <tr v-if="!is_monitor_mode">
                     <th> <input class="input" type="text" placeholder="筛选中文" v-model="filter.key"> </th>
-                    <th> <input class="input" type="text" placeholder="筛选英文" v-model="filter.value"> </th>
+                    <th> <input class="input" type="text" placeholder="筛选译文" v-model="filter.value"> </th>
+                    <th v-if="language !== 'en'"></th>
                     <th> <input class="input" type="text" style="width: 50px;" v-model="filter.star"> </th>
                     <th> <input class="input" type="text" placeholder="筛选备注" v-model="filter.comment"> </th>
                 </tr>
@@ -180,6 +182,9 @@
                     </td>
                     <td style="width: 400px;" @click="edit(i)">
                         <div class="block" v-html="high_light(i.Value, filter.value)"></div>
+                    </td>
+                    <td v-if="language !== 'en'" style="width: 400px;">
+                        <div class="block">{{ i.English }}</div>
                     </td>
                     <td style="text-align: center; vertical-align: middle;"> {{ i.Star }}</td>
                     <td style="width: 300px;" @click="edit(i)">

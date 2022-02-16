@@ -117,6 +117,7 @@ type editorInfo struct {
 	Key       string
 	ValueHash string
 	Value     string
+	English   string
 	Timestamp string
 	UserId    int
 	Source    string
@@ -135,7 +136,7 @@ func translatesEditor(r *http.Request) ([]byte, error) {
 	}
 
 	queryCmd := `
-	SELECT selection.keyHash, key_info.key, <mapping>.valueHash, selection.source, <mapping>.star, <mapping>.comment, <history>.value, <history>.timestamp, <history>.userId
+	SELECT selection.keyHash, key_info.key, <mapping>.valueHash, selection.source, <mapping>.star, <mapping>.comment, <history>.value, <history>.timestamp, <history>.userId, history_en.value
 	FROM
 	(SELECT * FROM <branch> WHERE useful = 1) 
 	as selection
@@ -143,6 +144,14 @@ func translatesEditor(r *http.Request) ([]byte, error) {
 	LEFT JOIN <mapping> ON selection.keyHash = <mapping>.keyHash
 	LEFT JOIN <history> ON <mapping>.keyHash = <history>.keyHash and <mapping>.valueHash = <history>.valueHash
 	`
+
+	if lang != "en" {
+		queryCmd += `
+	LEFT JOIN mapping_en ON selection.keyHash = mapping_en.keyHash
+	LEFT JOIN history_en ON mapping_en.keyHash = history_en.keyHash and mapping_en.valueHash = history_en.valueHash
+	`
+	}
+
 	queryCmd = strings.ReplaceAll(queryCmd, "<branch>", "branch_"+branch)
 	queryCmd = strings.ReplaceAll(queryCmd, "<mapping>", "mapping_"+lang)
 	queryCmd = strings.ReplaceAll(queryCmd, "<history>", "history_"+lang)
@@ -168,7 +177,8 @@ func translatesEditor(r *http.Request) ([]byte, error) {
 			&i.Comment,
 			&i.Value,
 			&t,
-			&i.UserId)
+			&i.UserId,
+			&i.English)
 		i.Timestamp = strconv.FormatInt(t, 10)
 		infos = append(infos, *i)
 	}
