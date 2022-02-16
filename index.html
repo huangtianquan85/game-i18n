@@ -257,8 +257,38 @@
                     if (p[0] == '$') return s === p.substring(1);
                     return s.indexOf(p) !== -1;
                 },
+                place_holder_match(k, v) {
+                    let place_holder = '';
+                    let code = 0;
+                    for (let i = 0; i < k.length; ++i) {
+                        code = k.charCodeAt(i);
+                        if (code >= 9312 && code <= 9351) {
+                            place_holder += k[i];
+                        }
+                    }
+                    for (let i = 0; i < v.length; ++i) {
+                        code = v.charCodeAt(i);
+                        if (code >= 9312 && code <= 9351) {
+                            if (place_holder.indexOf(v[i]) == -1) {
+                                return false;
+                            }
+                            place_holder = place_holder.replace(v[i], '');
+                        }
+                    }
+
+                    if (place_holder.length > 0) {
+                        console.log(place_holder);
+                    }
+
+                    return place_holder.length == 0;
+                },
                 filter_func(t) {
                     let ft = this.filter;
+
+                    if (ft.key == '#' || ft.value == '#') {
+                        return !this.place_holder_match(t.Key, t.Value);
+                    }
+
                     return (this.match(t.Key, ft.key)
                         && this.match(t.Value, ft.value)
                         && t.Star >= ft.star
