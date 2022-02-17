@@ -49,58 +49,46 @@ func translates(r *http.Request) ([]byte, error) {
 		langInfos[tableName] = info
 	}
 
-	// 生成各语言字段
-	fields := make([]string, 0)
-	for _, l := range langs {
-		fields = append(fields, fmt.Sprintf("history_%s.value", l))
-	}
-
-	// 按照分支筛选
-	queryCmd := fmt.Sprintf(`
-	SELECT key_info.key, %s 
-	FROM
-	(SELECT keyhash FROM branch_%s WHERE useful = 1) 
-	as selection
-	LEFT JOIN key_info ON selection.keyhash = key_info.keyhash`,
-		strings.Join(fields, ", "), branch)
-
-	// 生成各语言 Join 语句
-	for _, l := range langs {
-		queryCmd += strings.ReplaceAll(`
-	LEFT JOIN mapping_<lang> ON selection.keyhash = mapping_<lang>.keyhash
-	LEFT JOIN history_<lang> ON mapping_<lang>.keyhash = history_<lang>.keyHash and mapping_<lang>.valueHash = history_<lang>.valueHash`,
-			"<lang>", l)
-	}
-
-	// query all useful rows
-	rows, err = DB.Query(queryCmd)
-	if err != nil {
-		return nil, fmt.Errorf("query error: %v", err)
-	}
-
-	defer rows.Close()
-
-	// scan to pb
 	root := pb.Root{
 		Table: make(map[string]*pb.Languages),
 		Langs: langInfos,
 	}
 
-	var key string
-	for rows.Next() {
-		values := make([]string, len(langs))
-		points := make([]interface{}, len(langs)+1)
-		points[0] = &key
+	// 生成各语言查询语句
+	for _, l := range langs {
+		queryCmd := fmt.Sprintf(`
+		SELECT key_info.key, history_<lang>.value
+		FROM
+		(SELECT keyhash FROM branch_%s WHERE useful = 1)
+		as selection
+		LEFT JOIN key_info ON selection.keyhash = key_info.keyhash
+		LEFT JOIN mapping_<lang> ON selection.keyhash = mapping_<lang>.keyhash
+		LEFT JOIN history_<lang> ON mapping_<lang>.keyhash = history_<lang>.keyHash and mapping_<lang>.valueHash = history_<lang>.valueHash`,
+			branch)
+		queryCmd = strings.ReplaceAll(queryCmd, "<lang>", l)
 
-		for i := range langs {
-			points[i+1] = &values[i]
+		// query all useful rows
+		rows, err = DB.Query(queryCmd)
+		if err != nil {
+			rows.Close()
+			return nil, fmt.Errorf("query error: %v", err)
 		}
 
-		rows.Scan(points...)
+		var key string
+		var value string
+		l := len(langs)
+		for rows.Next() {
+			rows.Scan(&key, &value)
 
-		root.Table[key] = &pb.Languages{
-			Translate: values,
+			if _, ok := root.Table[key]; !ok {
+				root.Table[key] = &pb.Languages{
+					Translate: make([]string, 0, l),
+				}
+			}
+			root.Table[key].Translate = append(root.Table[key].Translate, value)
 		}
+
+		rows.Close()
 	}
 
 	// convert to pb
