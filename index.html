@@ -264,15 +264,43 @@
                         code = k.charCodeAt(i);
                         if (code >= 9312 && code <= 9351) {
                             place_holder += k[i];
+                        } else if (k[i] == '{') {
+                            if (i < k.length - 2 && k[i + 2] == '}' && '0123456789'.indexOf(k[i + 1]) != -1) {
+                                place_holder += k.substring(i, i + 3);
+                                i += 2;
+                            } else {
+                                console.log('key {} not match');
+                                return false;
+                            }
+                        } else if (k[i] == '}') {
+                            console.log('key {} not match');
+                            return false;
                         }
                     }
                     for (let i = 0; i < v.length; ++i) {
                         code = v.charCodeAt(i);
                         if (code >= 9312 && code <= 9351) {
                             if (place_holder.indexOf(v[i]) == -1) {
+                                console.log('holder not match');
                                 return false;
                             }
                             place_holder = place_holder.replace(v[i], '');
+                        } else if (v[i] == '{') {
+                            if (i < v.length - 2 && v[i + 2] == '}' && '0123456789'.indexOf(v[i + 1]) != -1) {
+                                let p = v.substring(i, i + 3);
+                                if (place_holder.indexOf(p) == -1) {
+                                    console.log('{} holder not match');
+                                    return false;
+                                }
+                                place_holder = place_holder.replace(p, '');
+                                i += 2;
+                            } else {
+                                console.log('key {} not match');
+                                return false;
+                            }
+                        } else if (v[i] == '}') {
+                            console.log('value {} not match');
+                            return false;
                         }
                     }
 
