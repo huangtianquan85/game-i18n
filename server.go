@@ -49,6 +49,8 @@ func translates(r *http.Request) ([]byte, error) {
 		langInfos[tableName] = info
 	}
 
+	rows.Close()
+
 	root := pb.Root{
 		Table: make(map[string]*pb.Languages),
 		Langs: langInfos,
@@ -70,7 +72,6 @@ func translates(r *http.Request) ([]byte, error) {
 		// query all useful rows
 		rows, err = DB.Query(queryCmd)
 		if err != nil {
-			rows.Close()
 			return nil, fmt.Errorf("query error: %v", err)
 		}
 
@@ -111,6 +112,7 @@ type editorInfo struct {
 	Source    string
 	Star      int
 	Comment   string
+	Useful    bool
 }
 
 // 获取用于编辑器的翻译信息
@@ -124,55 +126,107 @@ func translatesEditor(r *http.Request) ([]byte, error) {
 	}
 
 	queryCmd := `
-	SELECT selection.keyHash, key_info.key, <mapping>.valueHash, selection.source, <mapping>.star, <mapping>.comment, <history>.value, <history>.timestamp, <history>.userId, history_en.value
-	FROM
-	(SELECT * FROM <branch> WHERE useful = 1) 
-	as selection
-	LEFT JOIN key_info ON selection.keyHash = key_info.keyHash
-	LEFT JOIN <mapping> ON selection.keyHash = <mapping>.keyHash
-	LEFT JOIN <history> ON <mapping>.keyHash = <history>.keyHash and <mapping>.valueHash = <history>.valueHash
+	SELECT <branch>.keyHash, <branch>.source, <branch>.useful, key_info.key, mapping_<lang>.valueHash, mapping_<lang>.star, mapping_<lang>.comment, history_<lang>.value, history_<lang>.timestamp, history_<lang>.userId
+	FROM <branch>
+	LEFT JOIN key_info ON <branch>.keyHash = key_info.keyHash
+	LEFT JOIN mapping_<lang> ON <branch>.keyHash = mapping_<lang>.keyHash
+	LEFT JOIN history_<lang> ON mapping_<lang>.keyHash = history_<lang>.keyHash and mapping_<lang>.valueHash = history_<lang>.valueHash
 	`
+	queryCmd = strings.ReplaceAll(queryCmd, "<branch>", "branch_"+branch)
+	queryCmd = strings.ReplaceAll(queryCmd, "<lang>", lang)
 
-	if lang != "en" {
-		queryCmd += `
-	LEFT JOIN mapping_en ON selection.keyHash = mapping_en.keyHash
-	LEFT JOIN history_en ON mapping_en.keyHash = history_en.keyHash and mapping_en.valueHash = history_en.valueHash
-	`
+	rows, err := DB.Query(queryCmd)
+	if err != nil {
+		return nil, fmt.Errorf("query error: %v", err)
 	}
 
-	queryCmd = strings.ReplaceAll(queryCmd, "<branch>", "branch_"+branch)
-	queryCmd = strings.ReplaceAll(queryCmd, "<mapping>", "mapping_"+lang)
-	queryCmd = strings.ReplaceAll(queryCmd, "<history>", "history_"+lang)
+	// scan to editor info
+	infos := make(map[string]*editorInfo, 0)
+	for rows.Next() {
+		i := new(editorInfo)
+		var t int64
+		rows.Scan(&i.KeyHash,
+			&i.Source,
+			&i.Useful,
+			&i.Key,
+			&i.ValueHash,
+			&i.Star,
+			&i.Comment,
+			&i.Value,
+			&t,
+			&i.UserId)
+		i.Timestamp = strconv.FormatInt(t, 10)
+		infos[i.KeyHash] = i
+	}
 
-	// query all useful rows
-	rows, err := DB.Query(queryCmd)
+	rows.Close()
+
+	if lang != "en" {
+		queryCmd = `
+		SELECT <branch>.keyHash, history_<lang>.value
+		FROM <branch>
+		LEFT JOIN mapping_<lang> ON <branch>.keyHash = mapping_<lang>.keyHash
+		LEFT JOIN history_<lang> ON mapping_<lang>.keyHash = history_<lang>.keyHash and mapping_<lang>.valueHash = history_<lang>.valueHash
+		`
+		queryCmd = strings.ReplaceAll(queryCmd, "<branch>", "branch_"+branch)
+		queryCmd = strings.ReplaceAll(queryCmd, "<lang>", "en")
+
+		rows, err := DB.Query(queryCmd)
+		if err != nil {
+			return nil, fmt.Errorf("query error: %v", err)
+		}
+
+		defer rows.Close()
+
+		var keyHash string
+		var english string
+		for rows.Next() {
+			rows.Scan(&keyHash, &english)
+			i, ok := infos[keyHash]
+			if ok {
+				i.English = english
+			}
+		}
+	}
+
+	// convert map to array
+	arr := make([]*editorInfo, 0, len(infos))
+	for _, v := range infos {
+		arr = append(arr, v)
+	}
+
+	// convert to json
+	data, err := json.Marshal(arr)
+	if err != nil {
+		return nil, fmt.Errorf("marshal error: %v", err)
+	}
+
+	return data, nil
+}
+
+// 获取语言列表
+func languages(r *http.Request) ([]byte, error) {
+	langs := make([]string, 0)
+	rows, err := DB.Query("SELECT * from languages ORDER BY `showOrder`;")
 	if err != nil {
 		return nil, fmt.Errorf("query error: %v", err)
 	}
 
 	defer rows.Close()
 
-	// scan to editor info
-	infos := make([]editorInfo, 0)
 	for rows.Next() {
-		i := new(editorInfo)
-		var t int64
-		rows.Scan(&i.KeyHash,
-			&i.Key,
-			&i.ValueHash,
-			&i.Source,
-			&i.Star,
-			&i.Comment,
-			&i.Value,
-			&t,
-			&i.UserId,
-			&i.English)
-		i.Timestamp = strconv.FormatInt(t, 10)
-		infos = append(infos, *i)
+		var tableName string
+		var showName string
+		var unityEnum string
+		var showIndex int
+		rows.Scan(&tableName, &showName, &unityEnum, &showIndex)
+		if tableName != "zh-cn" {
+			langs = append(langs, tableName)
+		}
 	}
 
 	// convert to json
-	data, err := json.Marshal(infos)
+	data, err := json.Marshal(langs)
 	if err != nil {
 		return nil, fmt.Errorf("marshal error: %v", err)
 	}
@@ -443,6 +497,7 @@ func StartServer() {
 	addHttpSimpleHandler("commit-translate", commitTranslate)
 	addHttpBodyHandler("translates", translates)
 	addHttpBodyHandler("translates-editor", translatesEditor)
+	addHttpBodyHandler("languages", languages)
 	addHttpSimpleHandler("update-sources", updateSources)
 	addHttpBodyHandler("auto-translate", autoTranslate)
 	addHttpBodyHandler("get-screen", getScreen)
