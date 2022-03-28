@@ -65,8 +65,8 @@ func translates(r *http.Request) ([]byte, error) {
 		as selection
 		LEFT JOIN key_info ON selection.keyhash = key_info.keyhash
 		LEFT JOIN mapping_<lang> ON selection.keyhash = mapping_<lang>.keyhash
-		LEFT JOIN history_<lang> ON mapping_<lang>.keyhash = history_<lang>.keyHash and mapping_<lang>.valueHash = history_<lang>.valueHash`,
-			branch)
+		LEFT JOIN history_<lang> ON mapping_<lang>.keyhash = history_<lang>.keyHash and mapping_<lang>.valueHash = history_<lang>.valueHash
+		ORDER BY key_info.key`, branch)
 		queryCmd = strings.ReplaceAll(queryCmd, "<lang>", l)
 
 		// query all useful rows
