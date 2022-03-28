@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"compress/flate"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -98,7 +100,16 @@ func translates(r *http.Request) ([]byte, error) {
 		return nil, fmt.Errorf("marshal error: %v", err)
 	}
 
-	return data, nil
+	output := bytes.NewBuffer(nil)
+	flateWrite, err := flate.NewWriter(output, flate.BestCompression)
+	if err != nil {
+		return nil, fmt.Errorf("compress error: %v", err)
+	}
+	defer flateWrite.Close()
+	flateWrite.Write(data)
+	flateWrite.Flush()
+
+	return output.Bytes(), nil
 }
 
 type editorInfo struct {
