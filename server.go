@@ -83,6 +83,7 @@ func translates(r *http.Request) ([]byte, error) {
 		var value string
 		l := len(langs)
 		for rows.Next() {
+			value = ""
 			rows.Scan(&key, &value)
 
 			if _, ok := root.Table[key]; !ok {
