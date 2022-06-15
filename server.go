@@ -25,6 +25,8 @@ func translates(r *http.Request) ([]byte, error) {
 		return nil, fmt.Errorf("branch can not empty")
 	}
 
+	compress := values.Get("uncompress") != "true"
+
 	// 获取语言列表
 	langs := make([]string, 0)
 	langInfos := make(map[string]*pb.LanguageInfo)
@@ -98,6 +100,10 @@ func translates(r *http.Request) ([]byte, error) {
 	data, err := proto.Marshal(&root)
 	if err != nil {
 		return nil, fmt.Errorf("marshal error: %v", err)
+	}
+
+	if !compress {
+		return data, nil
 	}
 
 	output := bytes.NewBuffer(nil)
