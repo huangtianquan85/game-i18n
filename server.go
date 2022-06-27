@@ -26,6 +26,10 @@ func translates(r *http.Request) ([]byte, error) {
 	}
 
 	compress := values.Get("uncompress") != "true"
+	format := values.Get("format")
+	if format == "" {
+		format = "protobuf"
+	}
 
 	// 获取语言列表
 	langs := make([]string, 0)
@@ -98,7 +102,13 @@ func translates(r *http.Request) ([]byte, error) {
 	}
 
 	// convert to pb
-	data, err := proto.Marshal(&root)
+	var data []byte
+	if format == "protobuf" {
+		data, err = proto.Marshal(&root)
+	} else {
+		data, err = json.MarshalIndent(&root, "", "  ")
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("marshal error: %v", err)
 	}
