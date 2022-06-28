@@ -285,7 +285,8 @@
                         //     translate: ''
                         // },
                     ],
-                    mask_tip: ''
+                    mask_tip: '',
+                    import_report: '',
                 }
             },
             computed: {
@@ -559,7 +560,6 @@
 
                     let cells = []
                     let titles = []
-                    cells.push(titles);
                     for (let l of Object.keys(data.Langs)) {
                         let index = data.Langs[l].Index;
                         if (index === undefined) {
@@ -567,6 +567,8 @@
                         }
                         titles[index] = l;
                     }
+                    titles.splice(0, 0, 'zh');
+                    cells.push(titles);
 
                     for (let zh of Object.keys(data.Table)) {
                         let row = [zh];
@@ -579,7 +581,110 @@
                     XLSX.writeFile(wb, "i18n.xlsx");
                 },
                 import_excel() {
+                    let input = document.createElement("input");
+                    input.type = "file";
+                    input.click();
+                    input.onchange = () => {
+                        let file = input.files[0];
+                        let reader = new FileReader();
+                        reader.onload = (e) => {
+                            let data = e.target.result;
+                            let workbook = XLSX.read(e.target.result);
+                            let sheet = workbook.Sheets[workbook.SheetNames[0]];
+                            this.commit_next(sheet, 1);
+                        };
+                        reader.readAsArrayBuffer(file);
+                    }
+                },
+                get_cell_name(col, row) {
+                    let col_name = String.fromCharCode('A'.charCodeAt(0) + col);
+                    return `${col_name}${row}`;
+                },
+                get_cell_value(sheet, col, row) {
+                    return sheet[this.get_cell_name(col, row)].v;
+                },
+                commit_next(sheet, col) {
+                    if (!sheet.hasOwnProperty(this.get_cell_name(col, 1))) {
+                        alert(this.import_report + 'Commit All Done');
+                        location.reload();
+                        return;
+                    }
 
+                    this.get_origin_data(sheet, col);
+                },
+                get_origin_data(sheet, col) {
+                    let lang = this.get_cell_value(sheet, col, 1);
+                    this.set_mask(`checking ${lang} ...`);
+                    fly.get(`/translates-editor?branch=${this.branch}&lang=${lang}`,
+                        null, {
+                        responseType: 'json'
+                    })
+                        .then((response) => {
+                            this.set_mask("");
+                            this.check_diff(response.data, sheet, col, lang);
+                        })
+                        .catch(function (error) {
+                            this.set_mask("");
+                            console.log(error);
+                            alert(error);
+                        });
+                },
+                add_import_report(msg, is_error = false) {
+                    this.import_report += msg;
+                    this.import_report += '\n';
+                    if (is_error) {
+                        console.error(msg);
+                    } else {
+                        console.log(msg);
+                    }
+                },
+                check_diff(origin, sheet, col, lang) {
+                    dict = {};
+                    for (let t of origin) {
+                        dict[t.Key] = t;
+                    }
+
+                    let commit = [];
+                    let row = 1;
+                    while (true) {
+                        row += 1;
+                        if (!sheet.hasOwnProperty(this.get_cell_name(col, row))) {
+                            break;
+                        }
+
+                        let k = this.get_cell_value(sheet, 0, row);
+                        if (!dict.hasOwnProperty(k)) {
+                            this.add_import_report(`invalid key: ${k}`, true);
+                            continue;
+                        }
+
+                        let v = this.get_cell_value(sheet, col, row);
+                        if (dict[k].Value === v) {
+                            continue;
+                        }
+
+                        commit.push({
+                            Key: k,
+                            Value: v,
+                            Star: dict[k].star,
+                            Comment: dict[k].comment,
+                        });
+                    }
+
+                    this.add_import_report(`${lang}:${commit.length}`);
+
+                    this.set_mask(`committing ${lang} for ${commit.length} changes ...`)
+                    fly.post(`/commit-translate?lang=${lang}`, commit)
+                        .then((response) => {
+                            this.add_import_report(`commit ${lang} success`);
+                            this.set_mask("");
+                            this.commit_next(sheet, col + 1);
+                        })
+                        .catch(function (error) {
+                            this.set_mask("");
+                            console.log(error);
+                            alert(error);
+                        });
                 }
             },
             created() {
