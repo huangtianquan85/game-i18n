@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FVBI Translate</title>
+    <title>I18N</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@3.2.26/dist/vue.global.prod.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flyio@0.6.14/dist/fly.min.js"></script>
     <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.18.9/package/dist/xlsx.full.min.js"></script>
     <style>
         .editor {
             position: fixed;
@@ -20,6 +21,24 @@
 
         strong {
             color: rgb(240, 100, 100);
+        }
+
+        .mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10000;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, .3);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mask-tip {
+            text-align: center;
+            margin-top: 45vh;
+            color: white;
         }
     </style>
     <script>
@@ -133,7 +152,8 @@
                     <div class="navbar-start">
                         <div class="navbar-item has-dropdown is-hoverable">
                             <a class="navbar-link">
-                                Mode({{ is_monitor_mode ? 'Monitor' : 'Search' }} - {{ only_show_useful ? 'Useful' : 'All' }})
+                                Mode({{ is_monitor_mode ? 'Monitor' : 'Search' }} - {{ only_show_useful ? 'Useful' :
+                                'All' }})
                             </a>
 
                             <div class="navbar-dropdown">
@@ -164,8 +184,14 @@
                             <input class="input" type="text" placeholder="replace words" v-model="batch_replace">
                         </div>
                         <div class="buttons" v-if="!is_monitor_mode">
-                            <a class="button is-primary" @click="batch_commit">
+                            <a class="button is-danger" @click="batch_commit">
                                 <strong>Replace All !!!CAUTION!!!</strong>
+                            </a>
+                            <a class="button is-light" @click="export_excel">
+                                <strong>Export</strong>
+                            </a>
+                            <a class="button is-light" @click="import_excel">
+                                <strong>Import</strong>
                             </a>
                         </div>
                     </div>
@@ -208,6 +234,11 @@
                 </tr>
             </tbody>
         </table>
+        <div class="mask" v-if="mask_tip !== ''">
+            <h1 class="mask-tip title">
+                {{ mask_tip }}
+            </h1>
+        </div>
     </div>
 
     <script type="text/javascript">
@@ -253,7 +284,8 @@
                         //     url: 'http://translate.google.cn/translate_a/single?client=gtx&dt=t&dj=1&ie=UTF-8&sl=auto&tl=en&q=<input>',
                         //     translate: ''
                         // },
-                    ]
+                    ],
+                    mask_tip: ''
                 }
             },
             computed: {
@@ -361,6 +393,9 @@
                             alert(error);
                         });
                 },
+                set_mask(tip) {
+                    this.mask_tip = tip;
+                },
                 load_translate() {
                     fly.get(`/translates-editor?branch=${this.branch}&lang=${this.language}`,
                         null, {
@@ -411,7 +446,7 @@
                         Comment: copy.comment,
                     }]
 
-                    // TODO: prevent user action
+                    this.set_mask('committing ...')
                     fly.post(`/commit-translate?lang=${this.language}`, commit)
                         .then(function (response) {
                             item.Value = copy.value;
@@ -422,6 +457,9 @@
                         .catch(function (error) {
                             console.log(error);
                             alert(error);
+                        })
+                        .finally(() => {
+                            this.set_mask("");
                         });
                 },
                 ignore_replace() {
@@ -453,7 +491,7 @@
                         }
                     }
 
-                    // TODO: prevent user action
+                    this.set_mask('batch committing ...')
                     fly.post(`/commit-translate?lang=${this.language}`, commit)
                         .then(function (response) {
                             for (const t of items) {
@@ -463,6 +501,9 @@
                         .catch(function (error) {
                             console.log(error);
                             alert(error);
+                        })
+                        .finally(() => {
+                            this.set_mask("");
                         });
                 },
                 refresh_monitor() {
@@ -494,6 +535,51 @@
                         this.load_translate();
                         window.history.replaceState(null, null, `?branch=master&lang=${this.language}`);
                     }
+                },
+                export_excel() {
+                    this.set_mask('exporting ...')
+                    fly.get(`/translates?branch=${this.branch}&format=json&uncompress=true`,
+                        null, {
+                        responseType: 'json'
+                    })
+                        .then((response) => {
+                            this.make_excel(response.data);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            alert(error);
+                        })
+                        .finally(() => {
+                            this.set_mask("");
+                        });
+
+                },
+                make_excel(data) {
+                    let wb = XLSX.utils.book_new();
+
+                    let cells = []
+                    let titles = []
+                    cells.push(titles);
+                    for (let l of Object.keys(data.Langs)) {
+                        let index = data.Langs[l].Index;
+                        if (index === undefined) {
+                            index = 0;
+                        }
+                        titles[index] = l;
+                    }
+
+                    for (let zh of Object.keys(data.Table)) {
+                        let row = [zh];
+                        row.push(...data.Table[zh].Translate);
+                        cells.push(row);
+                    }
+
+                    let ws = XLSX.utils.aoa_to_sheet(cells);
+                    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+                    XLSX.writeFile(wb, "i18n.xlsx");
+                },
+                import_excel() {
+
                 }
             },
             created() {
